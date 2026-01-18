@@ -1,0 +1,130 @@
+/*login,register,profile,forgot-password*/
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Noto+Serif+JP:wght@400;700;900&display=swap');
+
+:root {
+    --primary: #0c1a32;
+    --accent: #c5a059;
+    --bg-soft: #f4f1ea;
+    --white: #ffffff;
+    --text: #333333;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: var(--bg-soft);
+    color: var(--text);
+    overflow-x: hidden;
+}
+
+/* Hiệu ứng nền mờ ảo cho trang Auth */
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(rgba(12, 26, 50, 0.7), rgba(12, 26, 50, 0.7)), 
+                url('https://i.pinimg.com/1200x/a6/9b/1c/a69b1c0bd9b84180af6aa476e1b656e1.jpg') no-repeat center center/cover;
+    padding: 20px;
+}
+
+/* Thẻ bài Luxury */
+.luxury-card {
+    background: var(--white);
+    width: 100%;
+    max-width: 450px;
+    padding: 50px 40px;
+    border-radius: 2px; /* Góc nhọn tạo cảm giác cứng cáp, sang trọng */
+    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+    border-top: 6px solid var(--accent);
+    position: relative;
+    animation: slideIn 0.8s cubic-bezier(0.2, 1, 0.2, 1);
+}
+
+.luxury-card h2 {
+    font-family: 'Noto Serif JP', serif;
+    color: var(--primary);
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 30px;
+    letter-spacing: 0.1em;
+}
+
+/* Form Styling */
+.form-group { margin-bottom: 20px; }
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--primary);
+    text-transform: uppercase;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    background: #fdfdfd;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--white);
+}
+
+/* Button Luxury */
+.btn-luxury {
+    width: 100%;
+    padding: 15px;
+    background: var(--primary);
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.4s;
+    margin-top: 10px;
+    letter-spacing: 0.2em;
+}
+
+.btn-luxury:hover {
+    background: var(--accent);
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+/* Thông báo lỗi & Thành công */
+.alert {
+    padding: 12px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    border-left: 4px solid;
+}
+.alert-error { background: #fff5f5; color: #c53030; border-color: #c53030; }
+.alert-success { background: #f0fff4; color: #2f855a; border-color: #2f855a; }
+
+/* Link phụ */
+.auth-links {
+    margin-top: 25px;
+    text-align: center;
+    font-size: 0.85rem;
+}
+.auth-links a {
+    color: var(--primary);
+    text-decoration: none;
+    margin: 0 10px;
+    transition: color 0.3s;
+}
+.auth-links a:hover { color: var(--accent); }
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}

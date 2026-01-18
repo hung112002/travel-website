@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>観光地編集</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="admin-body">
+    <header class="admin-header">
+        <h1>管理ダッシュボード</h1>
+        <nav>
+            <a href="/admin">リストに戻る</a>
+            <a href="/logout" class="btn-logout">ログアウト</a>
+        </nav>
+    </header>
+
+    <main class="admin-container">
+        <% if (travel) { %>
+            <h2>観光地を編集: <%= travel.name %></h2>
+        <% } else { %>
+            <h2>観光地を新規追加</h2>
+        <% } %>
+
+        <form 
+          class="admin-form"
+          action="<% if (travel) { %>/admin/edit/<%= travel.id %><% } else { %>/admin/add<% } %>" 
+          method="POST"
+        >
+            <div class="form-group">
+                <label for="name">名前:</label>
+                <input type="text" id="name" name="name" value="<%= travel ? travel.name : '' %>" required>
+            </div>
+            <div class="form-group">
+                <label for="location">場所:</label>
+                <input type="text" id="location" name="location" value="<%= travel ? travel.location : '' %>">
+            </div>
+            <div class="form-group">
+                <label for="imageUrl">画像URL:</label>
+                <input type="text" id="imageUrl" name="imageUrl" value="<%= travel ? travel.imageUrl : '' %>">
+            </div>
+
+            <div class="form-group-checkbox">
+                <label for="is_featured">
+                    <input 
+                      type="checkbox" 
+                      id="is_featured" 
+                      name="is_featured" 
+                      value="1"
+                      <%= (travel && travel.is_featured) ? 'checked' : '' %>
+                    >
+                    おすすめ表示 
+                </label>
+            </div>
+            <div class="form-group-checkbox">
+                <label for="has_beach">
+                    <input type="checkbox" id="has_beach" name="has_beach" value="1" <%= (travel && travel.has_beach) ? 'checked' : '' %>>
+                    海沿い あり 
+                </label>
+            </div>
+            <div class="form-group-checkbox">
+                <label for="has_rest_stop">
+                    <input type="checkbox" id="has_rest_stop" name="has_rest_stop" value="1" <%= (travel && travel.has_rest_stop) ? 'checked' : '' %>>
+                    休憩所あり 
+                </label>
+                <div class="form-group-checkbox">
+                <label for="has_onsen">
+                    <input type="checkbox" id="has_onsen" name="has_onsen" value="1" <%= (travel && travel.has_onsen) ? 'checked' : '' %>>
+                    ♨️ 温泉 あり 
+                </label>
+                <label><input type="checkbox" name="mountain" value="1" <%= typeof mountain !== 'undefined' && mountain ? 'checked' : '' %>> ⛰️ 山・自然</label>
+            </div>
+            <label><input type="checkbox" name="history" value="1" <%= typeof history !== 'undefined' && history ? 'checked' : '' %>> ⛩️ 歴史</label>
+            </div>
+
+            <div class="form-group">
+                <label for="description">詳細:</label>
+                <textarea id="description" name="description" rows="5"><%= travel ? travel.description : '' %></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <% if (travel) { %> 更新 <% } else { %> 追加 <% } %>
+                </button>
+            </div>
+        </form>
+    </main>
+    <script src="js/transition.js"></script>
+</body>
+</html>

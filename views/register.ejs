@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>新規登録 | Shimane Travel</title>
+    <link rel="stylesheet" href="/css/auth-style.css">
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="luxury-card">
+            <h2>REGISTER</h2>
+            
+            <% if (error) { %>
+                <div class="alert alert-error">⚠️ <%= error %></div>
+            <% } %>
+
+            <form action="/register" method="POST" id="regForm">
+                <div class="form-group">
+                    <label>メールアドレス (Email)</label>
+                    <input type="email" name="email" id="emailInput" required>
+                    <small id="emailHint" style="display:block; margin-top:5px; font-size:12px;"></small>
+                </div>
+                <div class="form-group">
+                    <label>ユーザー名 (Tên hiển thị)</label>
+                    <input type="text" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label>パスワード (Mật khẩu)</label>
+                    <input type="password" name="password" required>
+                </div>
+                <button type="submit" class="btn-luxury">アカウント作成</button>
+            </form>
+
+            <div class="auth-links">
+                <a href="/login">既にアカウントをお持ちの方</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const emailInput = document.getElementById('emailInput');
+        const emailHint = document.getElementById('emailHint');
+
+        emailInput.addEventListener('blur', async () => {
+            const email = emailInput.value;
+            if(!email) return;
+
+            const res = await fetch('/check-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `email=${email}`
+            });
+            const data = await res.json();
+
+            if(data.exists) {
+                emailHint.innerText = "❌ このメールは既に使用されています。";
+                emailHint.style.color = "red";
+            } else {
+                emailHint.innerText = "✅ このメールは使用可能です。";
+                emailHint.style.color = "green";
+            }
+        });
+    </script>
+</body>
+</html>

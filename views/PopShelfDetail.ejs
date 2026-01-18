@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <% if (travel) { %>
+        <title><%= travel.name %> | Shimane Travel</title>
+    <% } else { %>
+        <title>見つかりません</title>
+    <% } %>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="admin-body">
+    <div id="page-loader" class="page-loader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <header class="main-header" style="position: static; background-color: #333;">
+        <div class="logo">
+            <a href="/">Shimane Travel</a>
+        </div>
+        <nav class="main-nav">
+            <a href="/" class="nav-link-hover">ホーム</a>
+            <a href="/cuisine" class="nav-link-hover">グルメ</a>
+            <a href="/people" class="nav-link-hover">匠・人物</a>
+            <a href="/all-destinations" class="nav-link-hover">全ての観光地</a>
+            
+            <% if (user) { %>
+                <a href="/profile" class="nav-link-hover" style="color: #c5a059; font-weight: bold;">👤 <%= user.username %></a>
+                <a href="/logout" class="nav-link-hover">ログアウト</a>
+            <% } else { %>
+                <a href="/login" class="login-btn-hover-effect">ログイン</a>
+            <% } %>
+        </nav>
+    </header>
+
+    <main class="detail-container" style="max-width: 1000px; margin: 50px auto; padding: 0 20px;">
+        <% if (travel) { %>
+            <div class="detail-hero-section">
+                <div class="detail-hero-content">
+                    <p class="detail-hero-tag" style="color: #c5a059; font-weight: bold;"><%= travel.location %></p>
+                    <h1 style="font-family: 'Noto Serif JP', serif; font-size: 2.5rem; margin-bottom: 20px;"><%= travel.name %></h1>
+                    <pre class="detail-hero-desc" style="white-space: pre-wrap; font-family: 'Noto Sans JP', sans-serif; line-height: 1.8; margin-bottom: 30px;"><%= travel.description %></pre>
+                    
+                    <div class="fav-action-container" style="margin: 20px 0;">
+                        <button id="favBtn" class="btn-luxury" style="width: auto; padding: 12px 25px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: #0c1a32; color: #c5a059; border: 1px solid #c5a059; border-radius: 4px; font-weight: bold;">
+                            <span id="favIcon">❤️</span> <span id="favText">お気に入りに追加</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="detail-hero-image" style="margin-top: 30px;">
+                    <img src="<%= travel.imageUrl || 'https://via.placeholder.com/600' %>" alt="<%= travel.name %>" style="width: 100%; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                </div>
+            </div>
+
+            <div class="detail-info-section" style="display: flex; gap: 40px; margin-top: 60px; flex-wrap: wrap;">
+                <div class="detail-map" style="flex: 1; min-width: 300px;">
+                    <iframe 
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d104118.44199516624!2d133.0041045!3d35.4582104!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x355704f6937e2837%3A0x6731e84a2f84c98e!2sShimane%2C%20Japan!5e0!3m2!1sen!2s!4v1705300000000!5m2!1sen!2s" 
+                      width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy">
+                    </iframe>
+                </div>
+                <div class="detail-info-list" style="flex: 1; min-width: 300px; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <h2 style="font-family: 'Noto Serif JP', serif; border-bottom: 2px solid #c5a059; padding-bottom: 10px; margin-bottom: 20px;">基本情報</h2>
+                    <dl style="display: grid; grid-template-columns: 100px 1fr; gap: 15px;">
+                        <dt style="font-weight: bold; color: #666;">住所</dt>
+                        <dd><%= travel.location %></dd>
+
+                        <dt style="font-weight: bold; color: #666;">営業時間</dt>
+                        <dd>09:00 - 18:00</dd>
+                        
+                        <dt style="font-weight: bold; color: #666;">定休日</dt>
+                        <dd>第2火曜日・祝日</dd>
+
+                        <dt style="font-weight: bold; color: #666;">電話番号</dt>
+                        <dd>--- (不明) ---</dd>
+                    </dl>
+                </div>
+            </div>
+
+        <% } else { %>
+            <div style="text-align: center; padding: 100px 0;">
+                <h1 style="color: #666;">場所が見つかりません</h1>
+                <p>お探しの場所は存在しません。</p>
+                <a href="/" style="color: #c5a059;">ホームに戻る</a>
+            </div>
+        <% } %>
+    </main>
+
+    <section class="recommend-section" style="background: #f9f9f9; padding: 80px 0;">
+        <div style="max-width: 1000px; margin: 0 auto; padding: 0 20px;">
+            <h2 class="recommend-title" style="display: flex; align-items: center; gap: 15px; font-family: 'Noto Serif JP', serif; margin-bottom: 40px;">
+                <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="35.5" cy="35.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
+                    <circle cx="64.5" cy="35.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
+                    <circle cx="35.5" cy="64.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
+                    <circle cx="64.5" cy="64.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
+                </svg>
+                おすすめコース 
+            </h2>
+            
+            <div class="carousel-container" style="position: relative;">
+                <button class="carousel-btn prev" id="prev-btn" style="position: absolute; left: -20px; top: 50%; z-index: 10; background: #fff; border: 1px solid #ddd; padding: 10px; cursor: pointer;">‹</button>
+                <div class="recommend-grid" id="recommend-grid" style="display: flex; gap: 20px; overflow-x: hidden; scroll-behavior: smooth;">
+                    <a href="/cuisine" class="recommend-card" style="min-width: 250px; background: #fff; text-decoration: none; color: inherit; border-radius: 4px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                        <img src="https://img-mdpr.freetls.fastly.net/article/A88T/wm/A88TfgxaTd1gZcfOUsu2uiCbU8QMv2lp3FOPc2aH_Zo.jpg?width=1400&auto=webp" style="width: 100%; height: 150px; object-fit: cover;">
+                        <div class="recommend-content" style="padding: 15px;">
+                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">グルメ</span>
+                            <h3 style="font-size: 1rem; margin: 10px 0;">島根のグルメを体験</h3>
+                        </div>
+                    </a>
+                    <a href="/people" class="recommend-card" style="min-width: 250px; background: #fff; text-decoration: none; color: inherit; border-radius: 4px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                        <img src="https://tabi.tetsunomichi.gr.jp/wp-content/uploads/page_japan-heritage-recognized_hero-1.jpg" style="width: 100%; height: 150px; object-fit: cover;">
+                        <div class="recommend-content" style="padding: 15px;">
+                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">匠・人物</span>
+                            <h3 style="font-size: 1rem; margin: 10px 0;">匠の技に触れる</h3>
+                        </div>
+                    </a>
+                    <a href="/all-destinations" class="recommend-card" style="min-width: 250px; background: #fff; text-decoration: none; color: inherit; border-radius: 4px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                        <img src="https://img-www.knt.co.jp/travelguide/yado/image/travelguide_178_mv.jpg" style="width: 100%; height: 150px; object-fit: cover;">
+                        <div class="recommend-content" style="padding: 15px;">
+                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">温泉</span>
+                            <h3 style="font-size: 1rem; margin: 10px 0;">美肌の湯・温泉巡り</h3>
+                        </div>
+                    </a>
+                    <a href="/all-destinations" class="recommend-card" style="min-width: 250px; background: #fff; text-decoration: none; color: inherit; border-radius: 4px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                        <img src="https://www.kankou-shimane.com/jp/wp-content/uploads/2020/03/363-tamazukurionsen-006-e1584853822575.jpg" style="width: 100%; height: 150px; object-fit: cover;">
+                        <div class="recommend-content" style="padding: 15px;">
+                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">温泉</span>
+                            <h3 style="font-size: 1rem; margin: 10px 0;">美肌の湯・温泉巡り</h3>
+                        </div>
+                    </a>
+                </div>
+                <button class="carousel-btn next" id="next-btn" style="position: absolute; right: -20px; top: 50%; z-index: 10; background: #fff; border: 1px solid #ddd; padding: 10px; cursor: pointer;">›</button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer" style="background: #333; color: #fff; padding: 60px 0; text-align: center;">
+        <div class="footer-links" style="margin-bottom: 30px; display: flex; justify-content: center; gap: 20px;">
+            <a href="/" style="color: #ccc; text-decoration: none;">観光ガイド</a>
+            <a href="/" style="color: #ccc; text-decoration: none;">お問い合わせ</a>
+            <a href="/" style="color: #ccc; text-decoration: none;">運営情報</a>
+        </div>
+        <div class="footer-logo" style="font-family: 'Noto Serif JP', serif; font-size: 1.5rem; color: #c5a059; margin-bottom: 10px;">
+            Shimane Travel
+        </div>
+        <p style="font-size: 0.8rem; color: #888;">© 2025-2026 Shimane Project by Hùng (Shimane IT Design College)</p>
+    </footer>
+
+    <script>
+ const isLoggedIn = <%= user ? 'true' : 'false' %>;
+  const destinationId = <%- JSON.stringify(travel ? travel.id : null) %>;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Carousel logic (luôn có)
+    const grid = document.getElementById('recommend-grid');
+    const nextBtn = document.getElementById('next-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const scrollAmount = 300;
+
+    if (nextBtn && grid) nextBtn.addEventListener('click', () => grid.scrollBy({ left: scrollAmount, behavior: 'smooth' }));
+    if (prevBtn && grid) prevBtn.addEventListener('click', () => grid.scrollBy({ left: -scrollAmount, behavior: 'smooth' }));
+
+    // Favorite logic (chỉ chạy khi có travel + có nút)
+    const favBtn = document.getElementById('favBtn');
+    if (!favBtn || !destinationId) return;
+
+    favBtn.addEventListener('click', async () => {
+      if (!isLoggedIn) {
+        alert("お気に入り機能を利用するにはログインが必要です。(Bạn cần đăng nhập để sử dụng tính năng này)");
+        window.location.href = "/login";
+        return;
+      }
+
+      try {
+        const res = await fetch('/toggle-favorite', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ destinationId })
+        });
+
+        const data = await res.json();
+
+        if (data.status === 'liked') {
+          alert("お気に入りに追加しました！ (Đã thêm vào yêu thích)");
+          document.getElementById('favText').innerText = "お気に入りから削除";
+        } else {
+          alert("お気に入りから削除しました。 (Đã xóa khỏi yêu thích)");
+          document.getElementById('favText').innerText = "お気に入りに追加";
+        }
+      } catch (error) {
+        console.error("Error toggling favorite:", error);
+        alert("エラーが発生しました。もう一度お試しください。");
+      }
+    });
+  });
+</script>
+
+    <script src="/js/transition.js"></script>
+</body>
+</html>

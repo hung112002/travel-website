@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ログイン | Shimane Travel</title>
+    <link rel="stylesheet" href="/css/auth-style.css">
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="luxury-card">
+            <h2>LOGIN</h2>
+
+            <% if (error) { %>
+                <div class="alert alert-error">⚠️ <%= error %></div>
+            <% } %>
+
+            <% if (typeof req !== 'undefined' && req.query.registered) { %>
+                <div class="alert alert-success">✅ 登録が完了しました。ログインしてください。</div>
+            <% } %>
+
+            <form action="/login" method="POST">
+                <div class="form-group">
+                    <label>メールアドレス (Email)</label>
+                    <input type="email" name="email" placeholder="example@gmail.com" required>
+                </div>
+                <div class="form-group">
+                    <label>パスワード (Mật khẩu)</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-luxury">ログイン</button>
+            </form>
+
+            <div class="auth-links">
+                <a href="/register">新規登録 (Đăng ký)</a>
+                <a href="/forgot-password">パスワードをお忘れですか？</a>
+                <a href="/">ホームに戻る</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

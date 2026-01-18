@@ -1,0 +1,35 @@
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+     x="0px" y="0px" viewBox="0 0 800 600" style="enable-background:new 0 0 800 600;" xml:space="preserve">
+<style type="text/css">
+    .st0{fill:#C5E8DA;} /* Màu cho các khu vực */
+    .st1{fill:#B3DCCF;}
+    .st2{fill:#A1D0C4;}
+    .st3{fill:#8FC4BA;}
+    .st4{fill:#7DADA9;}
+    .st5{fill:#6B9E9E;}
+    .st6{fill:#599193;}
+    .st7{fill:#478588;}
+    .map-region {
+        transition: fill 0.3s ease; /* Hiệu ứng hover */
+        cursor: pointer;
+    }
+    .map-region:hover {
+        fill: #007bff !important; /* Màu xanh khi hover */
+    }
+</style>
+<path id="region-izumo" class="st0 map-region" d="M200,150c-20-20,0-50,30-50h100c30,0,50,30,50,50v100c0,20-30,40-50,40h-50c-20,0-30-20-30-40V150z"/>
+<path id="region-matsue" class="st1 map-region" d="M400,150c-20-20,0-50,30-50h100c30,0,50,30,50,50v100c0,20-30,40-50,40h-50c-20,0-30-20-30-40V150z"/>
+<path id="region-iwami" class="st2 map-region" d="M200,300c-20-20,0-50,30-50h100c30,0,50,30,50,50v100c0,20-30,40-50,40h-50c-20,0-30-20-30-40V300z"/>
+<path id="region-oki" class="st3 map-region" d="M400,300c-20-20,0-50,30-50h100c30,0,50,30,50,50v100c0,20-30,40-50,40h-50c-20,0-30-20-30-40V300z"/>
+<path id="region-unnan" class="st4 map-region" d="M600,150c-20-20,0-50,30-50h100c30,0,50,30,50,50v100c0,20-30,40-50,40h-50c-20,0-30-20-30-40V150z"/>
+<path id="region-ohda" class="st5 map-region" d="M600,300c-20-20,0-50,30-50h100c30,0,50,30,50,50v100c0,20-30,40-50,40h-50c-20,0-30-20-30-40V300z"/>
+
+<g id="map-legend">
+    <rect x="50" y="450" width="20" height="20" class="st0"/>
+    <text x="80" y="465" style="font-family:'Arial', sans-serif; font-size:16px;">出雲エリア (Khu Izumo)</text>
+    <rect x="50" y="480" width="20" height="20" class="st1"/>
+    <text x="80" y="495" style="font-family:'Arial', sans-serif; font-size:16px;">松江エリア (Khu Matsue)</text>
+    <rect x="50" y="510" width="20" height="20" class="st2"/>
+    <text x="80" y="525" style="font-family:'Arial', sans-serif; font-size:16px;">石見エリア (Khu Iwami)</text>
+</g>
+</svg>

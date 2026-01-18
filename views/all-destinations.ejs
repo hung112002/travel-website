@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全ての観光地</title> <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="admin-body">   
+    <div id="page-loader" class="page-loader">
+    <div class="loader-spinner"></div>
+</div>
+
+    <header class="main-header" style="position: static; background-color: #6d7c77;">
+        <div class="logo">
+            <a href="/#all-destinations">Shimane Travel</a>
+        </div>
+        <nav class="main-nav">
+            <a href="/" class="nav-link-hover">ホーム</a>
+            <a href="/cuisine" class="nav-link-hover">グルメ</a>
+            <a href="/people" class="nav-link-hover">匠・人物</a>
+            <a href="/all-destinations" class="nav-link-hover">全ての観光地</a> <a href="/login" class="login-btn-hover-effect">ログイン</a>
+        </nav>
+    </header>
+
+    <main class="detail-container">
+        <h1>全ての観光地</h1>
+        
+        <form action="/all-destinations" method="GET" class="search-bar">
+    <input type="text" name="search" placeholder="キーワード ..." value="<%= typeof keyword !== 'undefined' ? keyword : '' %>">
+    
+    <div class="filter-options">
+        <label><input type="checkbox" name="sea" value="1" <%= typeof sea !== 'undefined' && sea ? 'checked' : '' %>> 海沿い</label>
+        
+        <label><input type="checkbox" name="rest" value="1" <%= typeof rest !== 'undefined' && rest ? 'checked' : '' %>> 休憩所</label>
+        
+        <label><input type="checkbox" name="onsen" value="1" <%= typeof onsen !== 'undefined' && onsen ? 'checked' : '' %>> ♨️ 温泉</label>
+        
+        <label><input type="checkbox" name="mountain" value="1" <%= typeof mountain !== 'undefined' && mountain ? 'checked' : '' %>> ⛰️ 山・自然</label>
+        
+        <label><input type="checkbox" name="history" value="1" <%= typeof history !== 'undefined' && history ? 'checked' : '' %>> ⛩️ 歴史</label>
+    </div>
+
+    <button type="submit">絞り込む</button>
+</form>
+        
+        <div class="travel-grid" style="margin-top: 30px;">
+            <% if (travels.length > 0) { %>
+                <% travels.forEach(function(travel) { %>
+                    <a href="/travel/<%= travel.id %>" class="travel-card card-hover-effect">
+                        <div class="travel-card-content">
+                            <h3><%= travel.name %></h3>
+                            <p class="location-text"><%= travel.location %></p>
+                            <% if (travel.description) { %>
+                                <p class="travel-card-desc">
+                                    <%= travel.description.substring(0, 150) %>...
+                                </p>
+                            <% } %>
+                        </div>
+                        <div class="travel-card-image">
+                            <img src="<%= travel.imageUrl || 'https://via.placeholder.com/300' %>" alt="<%= travel.name %>" class="img-zoom">
+                        </div>
+                    </a> 
+                <% }); %>
+            <% } else { %>
+                <p>該当する場所はありません。</p> <% } %>
+        </div>
+    </main>
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <div class="footer-left">
+                <div class="footer-logo">Shimane<span>Guide</span></div>
+                <p class="footer-desc">
+                    神々の国、島根。<br>
+                    忘れられない感動と癒やしの旅をサポートします。
+                </p>
+                <div class="social-icons">
+                    <a href="#" class="social-link">Instagram</a>
+                    <a href="#" class="social-link">X (Twitter)</a>
+                    <a href="#" class="social-link">Facebook</a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h4>サイトマップ</h4>
+                <ul>
+                    <li><a href="#">ホーム</a></li>
+                    <li><a href="#">観光スポット</a></li>
+                    <li><a href="#">グルメ・お土産</a></li>
+                    <li><a href="#">アクセス</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>インフォメーション</h4>
+                <ul>
+                    <li><a href="#">プライバシーポリシー</a></li>
+                    <li><a href="#">よくある質問</a></li>
+                    <li><a href="#">お問い合わせ</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Shimane IT College Student Project. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <a href="#" id="backToTop" class="back-to-top">↑</a>
+    <script src="js/transition.js"></script>
+</body>
+</html>

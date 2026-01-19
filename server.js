@@ -3,10 +3,20 @@ const express = require("express");
 const session = require("express-session");
 const sqlite3 = require("sqlite3").verbose();
 const crypto = require("crypto");
-
+const bcrypt = require('bcrypt');
+const multer = require('multer');
+const saltRounds = 10;
 const app = express();
 const port = 3000;
 
+
+const storage = multer.diskStorage({
+    destination: './public/uploads/',
+    filename: (req, file, cb) => {
+        cb(null, 'avatar-' + Date.now() + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage: storage });
 // ===============================================================
 // 1) CONNECT DB + INIT TABLES + SEED USERS
 // ===============================================================
@@ -15,6 +25,7 @@ const db = new sqlite3.Database("./travel.db", (err) => {
   console.log("✅ Connected to travel.db");
 
   db.serialize(() => {
+    // SỬA LỖI TẠI ĐÂY: Thêm dấu phẩy sau cột avatar
     db.run(`
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -22,9 +33,16 @@ const db = new sqlite3.Database("./travel.db", (err) => {
         email TEXT UNIQUE,
         password TEXT,
         role TEXT DEFAULT 'user',
+        avatar TEXT DEFAULT '/images/default-avatar.png',
         reset_token TEXT
       )
     `);
+
+    // Lệnh nâng cấp bảng nếu đã có DB cũ
+    db.run("ALTER TABLE users ADD COLUMN avatar TEXT DEFAULT '/images/default-avatar.png'", (err) => {
+        if (err) { /* Cột đã tồn tại */ }
+        else console.log("✅ Đã nâng cấp bảng users: Thêm cột avatar.");
+    });
 
     db.run(`
       CREATE TABLE IF NOT EXISTS destinations (
@@ -42,29 +60,25 @@ const db = new sqlite3.Database("./travel.db", (err) => {
       )
     `);
 
-    db.run(
-      `
+    db.run(`
       CREATE TABLE IF NOT EXISTS favorites (
         user_id INTEGER,
         destination_id INTEGER,
         PRIMARY KEY (user_id, destination_id)
       )
-      `,
-      (e) => {
-        if (e) console.error("Favorites table error:", e.message);
-        else console.log("✅ Favorites table ready");
-      }
-    );
+    `);
 
-    // Seed users
-    db.run(
-      `INSERT OR IGNORE INTO users (email, username, password, role)
-       VALUES ('admin@gmail.com', 'Admin', '123', 'admin')`
-    );
-    db.run(
-      `INSERT OR IGNORE INTO users (email, username, password, role)
-       VALUES ('user@gmail.com', 'User', '123', 'user')`
-    );
+    // Seed users với Bcrypt
+    const seedInitialUsers = async () => {
+        const hashedPass = await bcrypt.hash('123', saltRounds);
+        db.run("UPDATE users SET password = ? WHERE email = ?", [hashedPass, 'admin@gmail.com'], (err) => {
+        if (!err) console.log("✅ Đã cập nhật mật khẩu Bcrypt cho Admin.");
+    });
+        db.run("UPDATE users SET password = ? WHERE email = ?", [hashedPass, 'user@gmail.com'], (err) => {
+        if (!err) console.log("✅ Đã cập nhật mật khẩu Bcrypt cho User thường.");
+    });
+};
+seedInitialUsers();
   });
 });
 
@@ -202,69 +216,99 @@ app.post("/check-email", (req, res) => {
 
 app.get("/login", (req, res) => res.render("login", { error: null }));
 
-app.post("/login", (req, res) => {
-  const { email, password } = req.body;
-
-  db.get("SELECT * FROM users WHERE email = ? AND password = ?", [email, password], (err, user) => {
-    if (err) return res.status(500).send(err.message);
-    if (!user) return res.render("login", { error: "メールアドレスまたはパスワードが間違っています。" });
-
-    req.session.isLoggedIn = true;
-    req.session.user = user;
-
-    if (user.role === "admin") return res.redirect("/admin");
-    return res.redirect("/");
-  });
+app.post('/login', (req, res) => {
+    const { email, password } = req.body;
+    db.get("SELECT * FROM users WHERE email = ?", [email], async (err, user) => {
+        if (user) {
+            // So sánh mật khẩu nhập vào với mã băm trong Database
+            const match = await bcrypt.compare(password, user.password);
+            if (match) {
+                req.session.user = user;
+                res.redirect('/');
+            } else {
+                res.render('login', { error: 'Mật khẩu không chính xác!' });
+            }
+        } else {
+            res.render('login', { error: 'Tài khoản không tồn tại!' });
+        }
+    });
 });
 
 app.get("/register", (req, res) => res.render("register", { error: null }));
 
-app.post("/register", (req, res) => {
-  const { email, username, password } = req.body;
-
-  db.run(
-    "INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, 'user')",
-    [email, username, password],
-    (err) => {
-      if (err) {
-        if (err.message.includes("UNIQUE constraint failed: users.email")) {
-          return res.render("register", { error: "このメールアドレスはすでに登録されています。" });
-        }
-        return res.render("register", { error: "エラーが発生しました。もう一度お試しください。" });
-      }
-      return res.redirect("/login?registered=true");
+app.post('/register', async (req, res) => {
+    const { email, username, password } = req.body;
+    try {
+        // Mã hóa mật khẩu với độ phức tạp saltRounds = 10
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        
+        const sql = "INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, 'user')";
+        db.run(sql, [email, username, hashedPassword], (err) => {
+            if (err) return res.render('register', { error: 'Email đã tồn tại!' });
+            res.redirect('/login?registered=true');
+        });
+    } catch (err) {
+        res.render('register', { error: 'Lỗi hệ thống, vui lòng thử lại.' });
     }
-  );
 });
 
 app.get("/logout", (req, res) => {
   req.session.destroy(() => res.redirect("/login"));
 });
 
-// PROFILE (ONLY ONCE) + favorites
-app.get("/profile", checkAuth, (req, res) => {
-  const userId = req.session.user.id;
+app.get('/profile', (req, res) => {
+    if (!req.session.user) return res.redirect('/login');
 
-  const sql = `
-    SELECT destinations.*
-    FROM destinations
-    JOIN favorites ON destinations.id = favorites.destination_id
-    WHERE favorites.user_id = ?
-  `;
+    const userId = req.session.user.id;
+    // Truy vấn lấy danh sách địa điểm đã yêu thích từ database
+    const sql = `
+        SELECT destinations.* FROM destinations 
+        JOIN favorites ON destinations.id = favorites.destination_id 
+        WHERE favorites.user_id = ?`;
 
-  db.all(sql, [userId], (err, favoritePlaces) => {
-    if (err) return res.status(500).send(err.message);
-
-    res.render("profile", {
-      user: req.session.user,
-      favorites: favoritePlaces || [],
+    db.all(sql, [userId], (err, favoritePlaces) => {
+        if (err) {
+            console.error(err.message);
+            return res.render('profile', { user: req.session.user, favorites: [] });
+        }
+        // QUAN TRỌNG: Phải gửi cả user và favorites sang EJS
+        res.render('profile', { 
+            user: req.session.user, 
+            favorites: favoritePlaces || [] 
+        });
     });
-  });
 });
 
+// 2. Route cập nhật thông tin cơ bản
+app.post('/profile/update', checkAuth, (req, res) => {
+    if (!req.session.user) return res.status(401).json({ success: false });
+    const { username, email } = req.body;
+    const userId = req.session.user.id;
+
+    db.run("UPDATE users SET username = ?, email = ? WHERE id = ?", [username, email, userId], (err) => {
+        if (err) return res.json({ success: false });
+        // Cập nhật lại session
+        req.session.user.username = username;
+        req.session.user.email = email;
+        res.json({ success: true });
+    });
+});
+
+// 3. Route đổi mật khẩu (Dùng cho tính năng đổi MK tại chỗ)
+app.post('/profile/change-password', checkAuth, (req, res) => {
+    const { newPassword } = req.body;
+    const userId = req.session.user.id;
+
+    db.run("UPDATE users SET password = ? WHERE id = ?", [newPassword, userId], (err) => {
+        if (err) return res.json({ success: false });
+        req.session.user.password = newPassword;
+        res.json({ success: true });
+    });
+});
 // ===============================================================
-// 6) FORGOT / RESET
+// 6) PASSWORD RESET ROUTES
 // ===============================================================
+
 app.get("/forgot-password", (req, res) => res.render("forgot-password", { msg: null }));
 
 app.post("/forgot-password", (req, res) => {

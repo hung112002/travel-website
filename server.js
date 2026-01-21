@@ -129,6 +129,11 @@ function checkAuth(req, res, next) {
   // If API -> return JSON (avoid returning HTML that breaks response.json())
   if (isApiRequest(req)) return res.status(401).json({ error: "ログインしていません。" });
 
+  req.session.save((err) => {
+    if (err) return next(err);
+    res.redirect('/profile'); // Chỉ chuyển trang sau khi session đã lưu xong
+});
+
   // Normal pages -> redirect
   return res.redirect("/login");
 }
@@ -137,6 +142,43 @@ function checkAdmin(req, res, next) {
   if (req.session?.user?.role === "admin") return next();
   return res.status(403).send("管理者権限がありません。");
 }
+function checkAdmin(req, res, next) {
+    // Kiểm tra xem đã đăng nhập chưa VÀ role có phải admin không
+    if (req.session.isLoggedIn && req.session.user && req.session.user.role === 'admin') {
+        return next();
+    }
+    // Nếu không phải admin, trả về lỗi hoặc về trang chủ
+    res.status(403).send("管理者権限がありません!");
+}
+
+// Áp dụng cho route admin
+app.get('/admin', checkAdmin, (req, res) => {
+    // 1. Lấy từ khóa tìm kiếm từ URL (ví dụ: /admin?search=Izumo)
+    const searchQuery = req.query.search || '';
+    
+    let sql = "SELECT * FROM destinations";
+    let params = [];
+
+    // 2. Nếu có từ khóa, thêm điều kiện WHERE vào câu lệnh SQL
+    if (searchQuery) {
+        sql += " WHERE name LIKE ? OR location LIKE ?";
+        // Dấu % giúp tìm kiếm tương đối (chứa từ khóa là được)
+        params = [`%${searchQuery}%`, `%${searchQuery}%`];
+    }
+
+    db.all(sql, params, (err, rows) => {
+        if (err) {
+            console.error("Lỗi tìm kiếm:", err.message);
+            return res.render('admin_PopShelfList', { travels: [] });
+        }
+
+        // 3. Gửi danh sách đã lọc và từ khóa tìm kiếm quay lại giao diện
+        res.render('admin_PopShelfList', { 
+            travels: rows, 
+            search: searchQuery // Gửi lại để ô input không bị mất chữ khi load trang
+        });
+    });
+});
 
 // ===============================================================
 // 4) PUBLIC ROUTES
@@ -218,13 +260,28 @@ app.get("/login", (req, res) => res.render("login", { error: null }));
 
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
+    
     db.get("SELECT * FROM users WHERE email = ?", [email], async (err, user) => {
+        // 1. Xử lý lỗi từ database
+        if (err) {
+            console.error(err.message);
+            return res.render('login', { error: 'Đã xảy ra lỗi hệ thống!' });
+        }
+
         if (user) {
-            // So sánh mật khẩu nhập vào với mã băm trong Database
+            // 2. So sánh mật khẩu
             const match = await bcrypt.compare(password, user.password);
+            
             if (match) {
+                // 3. Thiết lập Session
+                req.session.isLoggedIn = true; 
                 req.session.user = user;
-                res.redirect('/');
+
+                req.session.save((err) => {
+                    if (err) return next(err);
+                    res.redirect('/profile'); 
+                });
+                
             } else {
                 res.render('login', { error: 'Mật khẩu không chính xác!' });
             }
@@ -294,16 +351,27 @@ app.post('/profile/update', checkAuth, (req, res) => {
     });
 });
 
-// 3. Route đổi mật khẩu (Dùng cho tính năng đổi MK tại chỗ)
-app.post('/profile/change-password', checkAuth, (req, res) => {
+// Route: Đổi mật khẩu ngay tại trang Profile
+app.post('/profile/change-password', async (req, res) => {
+    if (!req.session.user) return res.json({ success: false });
+    
     const { newPassword } = req.body;
     const userId = req.session.user.id;
 
-    db.run("UPDATE users SET password = ? WHERE id = ?", [newPassword, userId], (err) => {
-        if (err) return res.json({ success: false });
-        req.session.user.password = newPassword;
-        res.json({ success: true });
-    });
+    try {
+        // MÃ HÓA mật khẩu mới trước khi lưu
+        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+        
+        db.run("UPDATE users SET password = ? WHERE id = ?", [hashedPassword, userId], (err) => {
+            if (err) return res.json({ success: false });
+            
+            // Cập nhật lại mật khẩu đã mã hóa trong session
+            req.session.user.password = hashedPassword;
+            res.json({ success: true });
+        });
+    } catch (err) {
+        res.json({ success: false });
+    }
 });
 // ===============================================================
 // 6) PASSWORD RESET ROUTES
@@ -338,58 +406,50 @@ app.get("/reset/:token", (req, res) => {
   });
 });
 
-app.post("/reset/:token", (req, res) => {
-  const { token } = req.params;
-  const { password } = req.body;
+// Route: Xử lý đặt lại mật khẩu mới
+app.post('/reset/:token', async (req, res) => {
+    const { token } = req.params;
+    const { password } = req.body; // Mật khẩu mới người dùng nhập
 
-  db.run(
-    "UPDATE users SET password = ?, reset_token = NULL WHERE reset_token = ?",
-    [password, token],
-    (err) => {
-      if (err) return res.status(500).send(err.message);
-      res.redirect("/login");
+    try {
+        // 1. Mã hóa mật khẩu mới bằng Bcrypt
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const sql = "UPDATE users SET password = ?, reset_token = NULL WHERE reset_token = ?";
+        db.run(sql, [hashedPassword, token], function(err) {
+            if (this.changes === 0) {
+                return res.send("Link hết hạn hoặc không hợp lệ.");
+            }
+            res.redirect('/login?reset=success');
+        });
+    } catch (err) {
+        res.send("Có lỗi xảy ra trong quá trình mã hóa.");
     }
-  );
 });
 
 // ===============================================================
 // 7) FAVORITES API (ALWAYS JSON)
 // ===============================================================
-app.post("/toggle-favorite", checkAuth, (req, res) => {
-  const userId = req.session?.user?.id;
-
-  const destinationId = Number(req.body?.destinationId);
-  if (!destinationId || Number.isNaN(destinationId)) {
-    return res.status(400).json({ error: "destinationId が必要です（数値）。" });
-  }
-
-  db.get(
-    "SELECT 1 FROM favorites WHERE user_id = ? AND destination_id = ?",
-    [userId, destinationId],
-    (err, row) => {
-      if (err) return res.status(500).json({ error: err.message });
-
-      if (row) {
-        db.run(
-          "DELETE FROM favorites WHERE user_id = ? AND destination_id = ?",
-          [userId, destinationId],
-          (err2) => {
-            if (err2) return res.status(500).json({ error: err2.message });
-            return res.json({ status: "unliked" });
-          }
-        );
-      } else {
-        db.run(
-          "INSERT INTO favorites (user_id, destination_id) VALUES (?, ?)",
-          [userId, destinationId],
-          (err2) => {
-            if (err2) return res.status(500).json({ error: err2.message });
-            return res.json({ status: "liked" });
-          }
-        );
-      }
+app.post('/toggle-favorite', (req, res) => {
+    // Nếu session không tồn tại, trả về lỗi 401
+    if (!req.session.user) {
+        return res.status(401).json({ error: "Unauthorized" });
     }
-  );
+
+    const { destinationId } = req.body;
+    const userId = req.session.user.id;
+
+    // Kiểm tra xem đã có trong danh sách chưa
+    db.get("SELECT * FROM favorites WHERE user_id = ? AND destination_id = ?", [userId, destinationId], (err, row) => {
+        if (row) {
+            // Đã có -> Xóa (Unlike)
+            db.run("DELETE FROM favorites WHERE user_id = ? AND destination_id = ?", [userId, destinationId]);
+            res.json({ status: 'unliked' });
+        } else {
+            // Chưa có -> Thêm (Like)
+            db.run("INSERT INTO favorites (user_id, destination_id) VALUES (?, ?)", [userId, destinationId]);
+            res.json({ status: 'liked' });
+        }
+    });
 });
 
 // ===============================================================

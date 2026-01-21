@@ -10,63 +10,70 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Noto+Serif+JP:wght@400;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body>
-   <div id="page-loader" class="page-loader">
-    <div class="loader-spinner"></div>
+<div id="page-loader" class="page-loader">
+    <div class="loader-content">
+        <img src="/images/shimanekko.png" alt="Loading..." class="shimanekko-loader">
+        <p class="loader-text">島根を探索中...</p>
+    </div>
 </div>
 
-    <header class="main-header">
+<header class="main-header">
+    <div class="nav-container">
         <div class="logo">
             <a href="/">
-                <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-icon">
-                    <circle cx="35.5" cy="35.5" r="17.5" stroke="white" stroke-width="8"/>
-                    <circle cx="64.5" cy="35.5" r="17.5" stroke="white" stroke-width="8"/>
-                    <circle cx="35.5" cy="64.5" r="17.5" stroke="white" stroke-width="8"/>
-                    <circle cx="64.5" cy="64.5" r="17.5" stroke="white" stroke-width="8"/>
+                <svg width="35" height="35" viewBox="0 0 100 100" fill="none" class="logo-icon">
+                    <circle cx="35.5" cy="35.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
+                    <circle cx="64.5" cy="35.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
+                    <circle cx="35.5" cy="64.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
+                    <circle cx="64.5" cy="64.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
                 </svg>
-                Shimane Travel
+                <span class="logo-text">Shimane<span>Travel</span></span>
             </a>
         </div>
+
         <nav class="main-nav">
-    <a href="/" class="nav-link-hover">ホーム</a>
-    <a href="/cuisine" class="nav-link-hover">グルメ</a>
-    <a href="/people" class="nav-link-hover">匠・人物</a>
-    <a href="/all-destinations">全ての観光地</a>
+            <a href="/" class="nav-link-hover">ホーム</a>
+            <a href="/cuisine" class="nav-link-hover">グルメ</a>
+            <a href="/people" class="nav-link-hover">匠・人物</a>
+            <a href="/all-destinations" class="nav-link-hover">全ての観光地</a>
 
-    <% if (user) { %>
-        <a href="/profile" class="nav-link-hover" style="color: #c5a059; font-weight: bold;">
-            👤 <%= user.username %>
-        </a>
-        <a href="/logout" class="nav-link-hover">ログアウト</a>
-    <% } else { %>
-        <a href="/login" class="login-btn-hover-effect">ログイン</a>
-    <% } %>
-</nav>
-    </header>
-
-    <div class="hero-section">
-        <video autoplay loop muted playsinline class="hero-video">
-            <source src="/videos/sozai.mp4" type="video/mp4">
-            Trình duyệt của bạn không hỗ trợ video.
-        </video>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1>島根を発見</h1>
-            <p>神話と伝説の地</p>
-            
-            <form action="/all-destinations" method="GET" class="nav-search-form">
-                <input 
-                  type="text" 
-                  name="search" 
-                  placeholder="観光地を検索..." 
-                  value="<%= typeof keyword !== 'undefined' ? keyword : '' %>"
-                >
-                <button type="submit">検索</button>
-            </form>
-
-            <a href="#travel-grid-anchor" class="hero-btn">今すぐ探索</a>
-        </div>
+            <% if (user) { %>
+                <div class="user-actions">
+                    <a href="/profile" class="nav-link-profile">
+                        👤 <%= user.username %>
+                    </a>
+                    <a href="/logout" class="nav-link-logout">ログアウト</a>
+                </div>
+            <% } else { %>
+                <a href="/login" class="login-btn-premium">ログイン</a>
+            <% } %>
+        </nav>
     </div>
+</header>
+
+<div class="hero-section">
+    <video autoplay loop muted playsinline class="hero-video">
+        <source src="/videos/sozai.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    
+    <div class="hero-content">
+        <h1 class="shiman-title">島根を発見</h1>
+        <p class="shiman-subtitle">神話と伝説, 縁結びの地へ</p>
+        
+        <form action="/all-destinations" method="GET" class="modern-search-form">
+            <input 
+              type="text" 
+              name="search" 
+              placeholder="観光地を検索..." 
+              value="<%= typeof keyword !== 'undefined' ? keyword : '' %>"
+            >
+            <button type="submit">探索</button>
+        </form>
+
+        <a href="#travel-grid-anchor" class="hero-scroll-btn">今すぐ探索</a>
+    </div>
+</div>
 
     <h1 id="travel-grid-anchor">おすすめの観光地 🗺️</h1>
     <div class="travel-grid">
@@ -914,8 +921,45 @@
             }
         });
     });
+    
 
 </script>
+<script>
+        window.addEventListener('load', function() {
+            // Tìm đến phần tử Loader bằng ID
+            const loader = document.getElementById('page-loader');
+            
+            if (loader) {
+                // Tạo hiệu ứng mờ dần (Fade out)
+                loader.style.opacity = '0';
+                
+                // Sau khi mờ hẳn (khoảng 0.5s), mới ẩn hoàn toàn khỏi layout
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500); 
+            }
+        });
+    </script>
 <script src="js/transition.js"></script>
+<script>
+    // 1. Hiệu ứng Header khi cuộn trang
+    window.addEventListener('scroll', function() {
+        const header = document.querySelector('.main-header');
+        if (window.scrollY > 80) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // 2. Ẩn Shimanekko Loader
+    window.addEventListener('load', function() {
+        const loader = document.getElementById('page-loader');
+        setTimeout(() => {
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 500);
+        }, 800); // Cho mèo nhảy lâu hơn chút như bạn muốn
+    });
+</script>
 </body>
 </html>

@@ -18,23 +18,37 @@
         <div class="loader-spinner"></div>
     </div>
 
-    <header class="main-header" style="position: static; background-color: #333;">
-        <div class="logo">
-            <a href="/">Shimane Travel</a>
+    <header class="main-header">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="/">
+                    <svg width="35" height="35" viewBox="0 0 100 100" fill="none" class="logo-icon">
+                        <circle cx="35.5" cy="35.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
+                        <circle cx="64.5" cy="35.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
+                        <circle cx="35.5" cy="64.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
+                        <circle cx="64.5" cy="64.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
+                    </svg>
+                    <span class="logo-text">Shimane<span>Travel</span></span>
+                </a>
+            </div>
+            <nav class="main-nav">
+                <a href="/" class="nav-link-hover">ホーム</a>
+                <a href="/cuisine" class="nav-link-hover">グルメ</a>
+                <a href="/people" class="nav-link-hover">匠・人物</a>
+                <a href="/all-destinations" class="nav-link-hover">全ての観光地</a>
+                
+                <% if (user) { %>
+                    <div class="user-actions">
+                        <a href="/profile" class="nav-link-profile">
+                            👤 <%= user.username %>
+                        </a>
+                        <a href="/logout" class="nav-link-logout">ログアウト</a>
+                    </div>
+                <% } else { %>
+                    <a href="/login" class="login-btn-premium">ログイン</a>
+                <% } %>
+            </nav>
         </div>
-        <nav class="main-nav">
-            <a href="/" class="nav-link-hover">ホーム</a>
-            <a href="/cuisine" class="nav-link-hover">グルメ</a>
-            <a href="/people" class="nav-link-hover">匠・人物</a>
-            <a href="/all-destinations" class="nav-link-hover">全ての観光地</a>
-            
-            <% if (user) { %>
-                <a href="/profile" class="nav-link-hover" style="color: #c5a059; font-weight: bold;">👤 <%= user.username %></a>
-                <a href="/logout" class="nav-link-hover">ログアウト</a>
-            <% } else { %>
-                <a href="/login" class="login-btn-hover-effect">ログイン</a>
-            <% } %>
-        </nav>
     </header>
 
     <main class="detail-container" style="max-width: 1000px; margin: 50px auto; padding: 0 20px;">
@@ -77,6 +91,16 @@
 
                         <dt style="font-weight: bold; color: #666;">電話番号</dt>
                         <dd>--- (不明) ---</dd>
+                        <dt style="font-weight: bold; color: #666;">アクセス</dt>
+                        <dd>09:00 - 18:00</dd>
+                        
+                        <dt style="font-weight: bold; color: #fb6666;">ホームページ</dt>
+                        <dd>https://www.sandmuseum.jp/</dd>
+
+                        <dt style="font-weight: bold; color: #000000;">訪問頃</dt>
+                        <dd>--- (不明) ---</dd>
+                        
+                        
                     </dl>
                 </div>
             </div>
@@ -200,6 +224,20 @@
   });
 </script>
 
-    <script src="/js/transition.js"></script>
+<script>
+  // Header scroll effect
+  window.addEventListener('scroll', function() {
+    const header = document.querySelector('.main-header');
+    if (window.scrollY > 80) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+</script>
+
+<script src="/js/transition.js"></script>
+</body>
+</html>
 </body>
 </html>

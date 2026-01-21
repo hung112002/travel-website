@@ -1,18 +1,14 @@
 
 :root {
-    --primary-color: hsl(0, 4%, 29%); 
-    --accent-color: hsl(0, 0%, 100%);
-    --bg-light: #ffffff; 
-    --bg-soft: #f9f9f9; 
-    --text-dark: #333333; 
+    --primary-red: #d32f2f;
+    --gold-accent: #c5a059;
+    --glass-bg: rgba(255, 255, 255, 0.15);
 }
 
-/* --- TỔNG THỂ --- */
 body {
-    background-color: var(--bg-soft);
-    font-family: 'Noto Serif JP', serif; /* Sử dụng font có chân (Serif) cho cảm giác trang trọng */
-    line-height: 1.8;
-    color: var(--text-dark);
+    margin: 0;
+    font-family: 'Noto Sans JP', sans-serif;
+    overflow-x: hidden;
 }
 
 /* --- TIÊU ĐỀ --- */
@@ -78,21 +74,217 @@ h1, h2, h3, h4, h5, p, a, li, dt, dd, button, input, textarea { font-family: 'No
 h1, h2, h3 { font-weight: 700; }
 a { text-decoration: none; color: inherit; }
 .main-header {
-    position: absolute; top: 0; left: 0; width: 100%; padding: 15px 30px;
-    display: flex; justify-content: space-between; align-items: center; z-index: 10;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 15px 0;
+    transition: all 0.4s ease;
+    background: transparent;
+    box-shadow: none;
 }
-.main-header .logo a {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 1.5rem; font-weight: bold; color: white; text-decoration: none;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+
+/* Static header styling */
+.main-header[style*="position: static"] {
+    position: static;
+    background: white;
+    padding: 15px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
+
+.main-header.scrolled {
+    background: rgba(255, 255, 255, 0.98);
+    padding: 10px 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.main-header.scrolled .logo a {
+    color: #d32f2f;
+    text-shadow: none;
+}
+
+.main-header.scrolled .main-nav a {
+    color: #333;
+    text-shadow: none;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    transition: color 0.3s ease;
+    gap: 12px;
+}
+
+.logo-icon {
+    flex-shrink: 0;
+}
+
+.logo-text {
+    color: #c5a059;
+    font-weight: 900;
+    transition: color 0.3s ease;
+}
+
+.logo-text span {
+    color: #c5a059;
+    transition: color 0.3s ease;
+}
+
+.main-header.scrolled .logo-text {
+    color: #d32f2f;
+}
+
+.main-header.scrolled .logo-text span {
+    color: #d32f2f;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-left: auto;
+    padding-right: 20px;
+}
+
 .main-nav a {
-    font-size: 1rem; font-weight: 600; color: white; text-decoration: none;
-    margin-left: 25px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    margin: 0;
+    padding: 8px 0;
+    border-radius: 0;
+    transition: all 0.3s ease;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
 }
+
+.main-nav a:hover {
+    background-color: transparent;
+    color: #c5a059;
+    transform: none;
+}
+
+/* User actions container */
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-link-profile {
+    border: 2px solid white;
+    border-radius: 25px;
+    padding: 8px 16px;
+    color: white !important;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.nav-link-profile:hover {
+    background-color: white;
+    color: #d32f2f !important;
+    text-shadow: none;
+}
+
+.nav-link-logout {
+    color: white !important;
+    font-weight: 600;
+    padding: 8px 12px;
+    transition: all 0.3s ease;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.nav-link-logout:hover {
+    color: #c5a059 !important;
+}
+
+.main-header.scrolled .nav-link-profile {
+    border-color: #d32f2f;
+    color: #d32f2f !important;
+    text-shadow: none;
+}
+
+.main-header.scrolled .nav-link-profile:hover {
+    background-color: #d32f2f;
+    color: white !important;
+}
+
+.main-header.scrolled .nav-link-logout {
+    color: #d32f2f !important;
+    text-shadow: none;
+}
+
+.main-header.scrolled .nav-link-logout:hover {
+    color: #d32f2f !important;
+    opacity: 0.7;
+}
+
+.login-btn-premium {
+    padding: 8px 25px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s;
+    border: 2px solid #d32f2f;
+    color: #d32f2f !important;
+    background: transparent;
+    text-shadow: none;
+}
+
+.login-btn-premium:hover {
+    background: #d32f2f;
+    color: #fff !important;
+}
+
+.main-header.scrolled .login-btn-premium {
+    border: 2px solid #d32f2f;
+    color: #d32f2f !important;
+    background: transparent;
+}
+
+.main-header.scrolled .login-btn-premium:hover {
+    background: #d32f2f;
+    color: #fff !important;
+}
+
+.main-nav a.login-btn-hover-effect {
+    background-color: rgba(197, 160, 89, 0.8);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+}
+
+.main-nav a.login-btn-hover-effect:hover {
+    background-color: rgba(197, 160, 89, 1);
+    box-shadow: 0 4px 12px rgba(197, 160, 89, 0.3);
+}
+
 .main-nav a.nav-admin-link {
-    background-color: rgba(255, 255, 255, 0.2); border: 1px solid white;
-    padding: 8px 15px; border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid white;
+    padding: 8px 15px;
+    border-radius: 5px;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    width: 100%;
 }
 .map-note {
     text-align: center;
@@ -106,8 +298,7 @@ a { text-decoration: none; color: inherit; }
     border: 1px solid #007bff;
 }
 
-/* 1. HIỆU ỨNG BUTTON (Nút bấm) */
-/* Áp dụng cho nút Tìm kiếm, Đăng nhập, Xem chi tiết... */
+
 .btn-hover-effect {
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     position: relative;
@@ -129,63 +320,60 @@ a { text-decoration: none; color: inherit; }
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     transform: scale(0.98); /* Thu nhỏ xíu tạo lực nhấn */
 }
+
+/* Class để ẩn màn che đi sau khi load xong */
+/* Container bao phủ toàn màn hình */
 .page-loader {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    background-color: #ffffff; /* Màu nền màn che (Trắng) */
-    z-index: 9999; /* Luôn nằm trên cùng */
+    height: 100vh;
+    background-color: #ffffff; /* Hoặc màu nền bạn thích */
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: opacity 0.6s ease-out, visibility 0.6s;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
 }
 
-/* Class để ẩn màn che đi sau khi load xong */
+.loader-content {
+    text-align: center;
+}
+/* Thêm đoạn này vào file CSS của bạn */
 .page-loader.hidden {
     opacity: 0;
+    pointer-events: none; /* Ngăn chặn tương tác khi ẩn */
     visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s;
 }
 
-/* 2. Vòng xoay (Spinner) - Optional: Có thể thay bằng Logo của bạn */
-.loader-spinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid #33cbd9;
-    border-top: 5px solid #d32f2f; /* Màu đỏ chủ đạo */
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+/* Hiệu ứng cho Shimanekko */
+.shimanekko-loader {
+    width: 120px; /* Chỉnh kích thước cho phù hợp */
+    height: auto;
+    animation: bounceShimanekko 1.2s ease-in-out infinite;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+.loader-text {
+    margin-top: 15px;
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #d32f2f;
+    font-weight: bold;
+    letter-spacing: 2px;
 }
 
-/* 3. Hiệu ứng nội dung trượt lên (Fade In Up) */
-/* Áp dụng cho body hoặc container chính */
-body {
-    animation: fadeInUp 0.8s ease-out;
+/* Hiệu ứng nhảy lên xuống */
+@keyframes bounceShimanekko {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-25px); }
 }
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px); /* Dịch xuống 20px */
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0); /* Về vị trí cũ */
-    }
-}
-
 /* ----------------------------------------- */
 
 /* 2. HIỆU ỨNG CARD (Thẻ địa điểm du lịch) */
 /* Áp dụng cho khung bao quanh mỗi địa điểm */
 .card-hover-effect {
+
     transition: all 0.4s ease;
     border-radius: 12px; /* Bo góc nếu chưa có */
     background: #fff;
@@ -219,9 +407,11 @@ body {
 /* 4. HIỆU ỨNG MENU (Navbar Links) */
 /* Gạch chân chạy từ trái sang phải */
 .nav-link-hover {
-    position: relative;
+    color: white;
     text-decoration: none;
-    color: #333;
+    margin-left: 25px;
+    font-weight: 500;
+    transition: color 0.3s;
 }
 
 .nav-link-hover::after {
@@ -231,33 +421,39 @@ body {
     height: 2px;
     bottom: -5px;
     left: 0;
-    background-color: hsl(88, 98%, 53%); /* Màu đỏ chủ đạo hoặc màu bạn thích */
+    background-color: hsl(208, 100%, 39%); /* Màu đỏ chủ đạo hoặc màu bạn thích */
     transition: width 0.3s ease;
 }
 
-.nav-link-hover:hover::after {
-    width: 100%; /* Chạy dài ra 100% */
-}
+.nav-link-hover:hover { color: var(--gold-accent); }
 
 
 /* ================================== */
 /* --- 3. HERO SECTION (VIDEO) --- */
 /* ================================== */
 .hero-section {
-    position: relative; height: 90vh; width: 100%; overflow: hidden;
-    display: flex; justify-content: center; align-items: center; color: white;
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
 }
 .hero-video {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    min-width: 100%; min-height: 100%; z-index: -2;
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: -1;
 }
 .hero-overlay {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(6, 10, 255, 0.4); z-index: -1;
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
+    z-index: 0;
 }
-.hero-content {
-    position: relative; z-index: 1; text-align: center; padding: 20px; width: 100%; max-width: 800px;
-}
+.hero-content { z-index: 1; width: 90%; max-width: 800px; }
 .hero-content h1 { font-size: 3.5rem; margin-bottom: 15px; font-weight: 700; }
 .hero-content p { font-size: 1.5rem; margin-bottom: 30px; color: #feffff; }
 .hero-btn {
@@ -265,13 +461,82 @@ body {
     border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 1rem;
     transition: background-color 0.3s ease;
 }
-.hero-btn:hover { background-color: #0056b3; }
+.shiman-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 4.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+}
+.modern-search-form {
+    display: flex;
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border-radius: 50px;
+    padding: 10px;
+    margin: 30px auto;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+.modern-search-form input[type="text"] {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 12px 20px;
+    font-size: 1rem;
+    outline: none;
+    color: white;
+}
+.modern-search-form input::placeholder { color: rgba(255,255,255,0.8); }
+
+.modern-search-form button {
+    background: var(--gold-accent);
+    border: none;
+    padding: 10px 30px;
+    border-radius: 40px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.modern-search-form button:hover {
+    background: #b88a3e;
+}
+
+/* Hero Scroll Button - Same style as search button */
+.hero-scroll-btn {
+    display: inline-block;
+    background: var(--gold-accent);
+    border: none;
+    padding: 12px 35px;
+    border-radius: 40px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 1rem;
+    margin-top: 20px;
+}
+
+.hero-scroll-btn:hover {
+    background: #b88a3e;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(197, 160, 89, 0.3);
+}
+
+.hero-scroll-btn .arrow-down {
+    display: none;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
 
 /* New hero for cuisine page */
 .hero {
     position: relative; height: 90vh; width: 100%; overflow: hidden;
     display: flex; justify-content: center; align-items: center; color: white;
-    background-image: url('https://static.gltjp.com/glt/data/article/21000/20705/20240522_115241_64256729_w1920.webp');
+    background-image: url('https://lh7-rt.googleusercontent.com/docsz/AD_4nXfMOkNiAN0ib0oCu4uzedqnK9BznDd58HqERzkoes4B-j-yYUPs2wmuiOsevkm8flmIyrpMOW8mg8LMw22GWRdSoyykRCeXRGI8Q2RMFHuzxUaGXpa9AG1O4SNNyCa96RXjVnHqug?key=Q-Sf6T-NnRQ-sxispa4a9ENz');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -317,24 +582,36 @@ h1#travel-grid-anchor { text-align: center; margin-top: 60px; color: #333; margi
     display: flex; align-items: center; gap: 50px; padding: 80px 0;
     max-width: 1100px; margin: 0 auto;
 }
-.home-section-content { flex: 1; padding: 0 20px; }
-.home-section-image { flex: 1; padding: 0 20px; }
-.home-section-image img { width: 100%; height: auto; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+.home-section-content { flex: 1;
+     padding: 0 20px; }
+.home-section-image { flex: 1;
+     padding: 0 20px; }
+.home-section-image img { width: 100%; height: auto; border-radius: 4px;
+     box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
 .section-subtitle {
-    display: block; font-family: sans-serif; font-size: 0.9rem; font-weight: bold; color: #e85a71;
-    letter-spacing: 2px; margin-bottom: 10px; text-transform: uppercase;
+    display: block;
+     font-family: sans-serif;
+      font-size: 0.9rem; font-weight:
+       bold; color: #e85a71;
+        letter-spacing: 2px; margin-bottom: 10px;
+        text-transform: uppercase;
 }
-.home-section-title { font-size: 2.5rem; color: #333; margin-top: 0; margin-bottom: 25px; line-height: 1.3; }
+.home-section-title { font-size: 2.5rem;
+     color: #333;
+      margin-top: 0; margin-bottom: 25px; line-height: 1.3; }
 .section-link {
-    display: inline-block; margin-top: 20px; color: #007bff; font-weight: bold;
-    text-decoration: none; border-bottom: 2px solid #007bff; padding-bottom: 2px;
-    transition: all 0.3s ease; font-family: sans-serif;
+    display: inline-block;
+     margin-top: 20px;
+      color: #007bff; 
+      font-weight: bold;
+    text-decoration: none;
+     border-bottom: 2px solid #007bff; padding-bottom: 2px;
+    transition: all 0.3s ease;
+     font-family: sans-serif;
 }
 .section-link:hover { color: #0056b3; border-bottom-color: #0056b3; }
 
-/* ================================== */
-/* ---  MAP SECTION (FULL WIDTH - MỚI) --- */
-/* ================================== */
+/* ================map================== */
     .map-section-full { background-color: #fff3f3; padding-top: 60px; margin-top: 60px; margin-bottom: 60px; }
     .map-header-container { text-align: center; max-width: 800px; margin: 0 auto 40px; padding: 0 20px; }
     .map-frame-container { width: 100%; line-height: 0; background-color: #f4f9fc; }
@@ -445,7 +722,7 @@ h1#travel-grid-anchor { text-align: center; margin-top: 60px; color: #333; margi
     width: 40px; height: 40px; font-size: 24px; font-weight: bold; color: #333;
     cursor: pointer; z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.15); transition: all 0.2s ease;
 }
-.carousel-btn:hover { background-color: white; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+.carousel-btn:hover { background-color: rgb(0, 92, 213); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
 .carousel-btn.prev { left: -20px; }
 .carousel-btn.next { right: -20px; }
 /* ================================== */
@@ -1024,7 +1301,7 @@ social-icons {
     bottom: 30px;
     right: 30px;
     background-color: var(--primary-color);
-    color: white;
+    color: rgb(0, 0, 0);
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -1040,7 +1317,7 @@ social-icons {
 .contact-form textarea:focus {
     outline: none;
     border-color: var(--primary-color);
-    background-color: white;
+    background-color: rgb(227, 19, 19);
     box-shadow: 0 0 0 3px rgba(38, 166, 154, 0.1);
 }
 

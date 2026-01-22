@@ -58,25 +58,40 @@
                     おすすめ表示 
                 </label>
             </div>
+
             <div class="form-group-checkbox">
                 <label for="has_beach">
                     <input type="checkbox" id="has_beach" name="has_beach" value="1" <%= (travel && travel.has_beach) ? 'checked' : '' %>>
-                    海沿い あり 
+                    🌊 海沿い あり 
                 </label>
             </div>
+
             <div class="form-group-checkbox">
                 <label for="has_rest_stop">
                     <input type="checkbox" id="has_rest_stop" name="has_rest_stop" value="1" <%= (travel && travel.has_rest_stop) ? 'checked' : '' %>>
-                    休憩所あり 
+                    ☕ 休憩所あり 
                 </label>
-                <div class="form-group-checkbox">
-                <label for="has_onsen">
-                    <input type="checkbox" id="has_onsen" name="has_onsen" value="1" <%= (travel && travel.has_onsen) ? 'checked' : '' %>>
+            </div>
+
+            <div class="form-group-checkbox">
+                <label for="isOnsen">
+                    <input type="checkbox" id="isOnsen" name="isOnsen" value="1" <%= (travel && travel.isOnsen) ? 'checked' : '' %>>
                     ♨️ 温泉 あり 
                 </label>
-                <label><input type="checkbox" name="mountain" value="1" <%= typeof mountain !== 'undefined' && mountain ? 'checked' : '' %>> ⛰️ 山・自然</label>
             </div>
-            <label><input type="checkbox" name="history" value="1" <%= typeof history !== 'undefined' && history ? 'checked' : '' %>> ⛩️ 歴史</label>
+
+            <div class="form-group-checkbox">
+                <label for="isMountain">
+                    <input type="checkbox" id="isMountain" name="isMountain" value="1" <%= (travel && travel.isMountain) ? 'checked' : '' %>>
+                    ⛰️ 山・自然
+                </label>
+            </div>
+
+            <div class="form-group-checkbox">
+                <label for="isHistory">
+                    <input type="checkbox" id="isHistory" name="isHistory" value="1" <%= (travel && travel.isHistory) ? 'checked' : '' %>>
+                    ⛩️ 歴史
+                </label>
             </div>
 
             <div class="form-group">

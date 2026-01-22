@@ -20,30 +20,25 @@
         <div class="nav-container">
             <div class="logo">
                 <a href="/">
-                    <svg width="35" height="35" viewBox="0 0 100 100" fill="none" class="logo-icon">
-                        <circle cx="35.5" cy="35.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
-                        <circle cx="64.5" cy="35.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
-                        <circle cx="35.5" cy="64.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
-                        <circle cx="64.5" cy="64.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
-                    </svg>
-                    <span class="logo-text">Shimane<span>Travel</span></span>
-                </a>
+                <img src="/images/shimanekko.png" alt="Shimane Logo" class="nav-logo">
+                <span class="logo-text">Shimane<span>Travel</span></span>
+            </a>
             </div>
-            <nav class="main-nav">
-                <a href="/" class="nav-link-hover">ホーム</a>
-                <a href="/cuisine" class="nav-link-hover">グルメ</a>
-                <a href="/people" class="nav-link-hover">匠・人物</a>
-                <a href="/all-destinations" class="nav-link-hover">全ての観光地</a>
-                
+            <nav class="nav-links">
+                <li><a href="/" class="nav-item">ホーム</a></li>
+                <li><a href="/cuisine" class="nav-item">グルメ</a></li>
+                <li><a href="/people" class="nav-item">匠・人物</a></li>
+                <li><a href="/all-destinations" class="nav-item">全ての観光地</a></li>
+
                 <% if (user) { %>
                     <div class="user-actions">
-                        <a href="/profile" class="nav-link-profile">
+                        <a href="/profile" class="btn-member">
                             👤 <%= user.username %>
                         </a>
-                        <a href="/logout" class="nav-link-logout">ログアウト</a>
+                        <a href="/logout" class="btn-logout">ログアウト</a>
                     </div>
                 <% } else { %>
-                    <a href="/login" class="login-btn-premium">ログイン</a>
+                    <a href="/login" class="btn-member">ログイン</a>
                 <% } %>
             </nav>
         </div>

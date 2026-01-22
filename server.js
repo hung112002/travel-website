@@ -203,15 +203,25 @@ app.get("/", (req, res) => {
 });
 
 app.get("/all-destinations", (req, res) => {
-  const { search, sea, rest, onsen, mountain, history } = req.query;
+  // 1. Nhận đầy đủ tham số từ URL, bao gồm cả 'location' mới
+  const { search, location, sea, rest, onsen, mountain, history } = req.query;
 
   let sql = "SELECT * FROM destinations WHERE 1=1";
   const params = [];
 
+  // 2. Lọc theo từ khóa (Search)
   if (search) {
     sql += " AND (name LIKE ? OR location LIKE ?)";
     params.push(`%${search}%`, `%${search}%`);
   }
+
+  // 3. THÊM MỚI: Lọc theo khu vực (Dropdown)
+  if (location && location !== 'all') {
+    sql += " AND location = ?";
+    params.push(location);
+  }
+
+  // 4. Giữ nguyên các bộ lọc đặc trưng cũ của bạn
   if (sea === "1") sql += " AND has_beach = 1";
   if (rest === "1") sql += " AND has_rest_stop = 1";
   if (onsen === "1") sql += " AND isOnsen = 1";
@@ -222,9 +232,12 @@ app.get("/all-destinations", (req, res) => {
 
   db.all(sql, params, (err, rows) => {
     if (err) return res.status(500).send(err.message);
+    
+    // 5. Render lại giao diện với đầy đủ các biến để file EJS không bị lỗi "not defined"
     res.render("all-destinations", {
       travels: rows || [],
       keyword: search || "",
+      location: location || "all", // Biến mới để giữ trạng thái Dropdown
       sea,
       rest,
       onsen,

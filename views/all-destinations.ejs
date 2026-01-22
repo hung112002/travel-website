@@ -25,46 +25,111 @@
                     <span class="logo-text">Shimane<span>Travel</span></span>
                 </a>
             </div>
-            <nav class="main-nav">
-                <a href="/" class="nav-link-hover">ホーム</a>
-                <a href="/cuisine" class="nav-link-hover">グルメ</a>
-                <a href="/people" class="nav-link-hover">匠・人物</a>
-                <a href="/all-destinations" class="nav-link-hover">全ての観光地</a>
-                
+            <nav class="nav-links">
+            <li><a href="/" class="nav-item">ホーム</a></li>
+            <li><a href="/cuisine" class="nav-item">グルメ</a></li>
+            <li><a href="/people" class="nav-item">匠・人物</a></li>
+            <li><a href="/all-destinations" class="nav-item">全ての観光地</a></li>
+
                 <% if (user) { %>
                     <div class="user-actions">
-                        <a href="/profile" class="nav-link-profile">
+                        <a href="/profile" class="btn-member">
                             👤 <%= user.username %>
                         </a>
-                        <a href="/logout" class="nav-link-logout">ログアウト</a>
+                        <a href="/logout" class="btn-logout">ログアウト</a>
                     </div>
                 <% } else { %>
-                    <a href="/login" class="login-btn-premium">ログイン</a>
+                    <a href="/login" class="btn-member">ログイン</a>
                 <% } %>
             </nav>
         </div>
     </header>
 
     <main class="detail-container">
-        <h1>全ての観光地</h1>
+        <div class="page-header">
+            <h1>全ての観光地</h1>
+            <p class="page-subtitle">島根の素晴らしい観光地を探索しましょう</p>
+        </div>
         
-        <form action="/all-destinations" method="GET" class="search-bar">
-    <input type="text" name="search" placeholder="キーワード ..." value="<%= typeof keyword !== 'undefined' ? keyword : '' %>">
-    
-    <div class="filter-options">
-        <label><input type="checkbox" name="sea" value="1" <%= typeof sea !== 'undefined' && sea ? 'checked' : '' %>> 海沿い</label>
-        
-        <label><input type="checkbox" name="rest" value="1" <%= typeof rest !== 'undefined' && rest ? 'checked' : '' %>> 休憩所</label>
-        
-        <label><input type="checkbox" name="onsen" value="1" <%= typeof onsen !== 'undefined' && onsen ? 'checked' : '' %>> ♨️ 温泉</label>
-        
-        <label><input type="checkbox" name="mountain" value="1" <%= typeof mountain !== 'undefined' && mountain ? 'checked' : '' %>> ⛰️ 山・自然</label>
-        
-        <label><input type="checkbox" name="history" value="1" <%= typeof history !== 'undefined' && history ? 'checked' : '' %>> ⛩️ 歴史</label>
-    </div>
+        <form action="/all-destinations" method="GET" class="search-bar-container">
+    <div class="search-bar-wrapper">
+        <div class="search-input-group">
+            <div class="search-input-wrapper">
+                <div class="location-select-wrapper">
+                    <select name="location" class="location-dropdown-modern">
+                        <option value="all" <%= typeof location !== 'undefined' && location === 'all' ? 'selected' : '' %>>エリア情報:全ての観光地 </option>
+                        <option value="Matsue" <%= typeof location !== 'undefined' && location === 'Matsue' ? 'selected' : '' %>>松江</option>
+                        <option value="Yasugi" <%= typeof location !== 'undefined' && location === 'Yasugi' ? 'selected' : '' %>>安来</option>
+                        <option value="Hamada" <%= typeof location !== 'undefined' && location === 'Hamada' ? 'selected' : '' %>>浜田</option>
+                        <option value="Masuda" <%= typeof location !== 'undefined' && location === 'Masuda' ? 'selected' : '' %>>益田</option>
+                        <option value="Matsue" <%= typeof location !== 'undefined' && location === 'Matsue' ? 'selected' : '' %>>松江市</option>
+                        <option value="Izumo" <%= typeof location !== 'undefined' && location === 'Izumo' ? 'selected' : '' %>>出雲市</option>
+                        <option value="Hamada" <%= typeof location !== 'undefined' && location === 'Hamada' ? 'selected' : '' %>>浜田市</option>
+                        <option value="Masuda" <%= typeof location !== 'undefined' && location === 'Masuda' ? 'selected' : '' %>>益田市</option>
+                        <option value="Oda" <%= typeof location !== 'undefined' && location === 'Oda' ? 'selected' : '' %>>大田市</option>
+                        <option value="Yasugi" <%= typeof location !== 'undefined' && location === 'Yasugi' ? 'selected' : '' %>>安来市</option>
+                        <option value="Gotsu" <%= typeof location !== 'undefined' && location === 'Gotsu' ? 'selected' : '' %>>江津市</option>
+                        <option value="Unnan" <%= typeof location !== 'undefined' && location === 'Unnan' ? 'selected' : '' %>>雲南市</option>
+                        <option value="Okuizumo" <%= typeof location !== 'undefined' && location === 'Okuizumo' ? 'selected' : '' %>>奥出雲町</option>
+                        <option value="Iinan" <%= typeof location !== 'undefined' && location === 'Iinan' ? 'selected' : '' %>>飯南町</option>
+                        <option value="Kawamoto" <%= typeof location !== 'undefined' && location === 'Kawamoto' ? 'selected' : '' %>>川本町</option>
+                        <option value="Misato" <%= typeof location !== 'undefined' && location === 'Misato' ? 'selected' : '' %>>美郷町</option>
+                        <option value="Ohnan" <%= typeof location !== 'undefined' && location === 'Ohnan' ? 'selected' : '' %>>邑南町</option>
+                        <option value="Tsuwano" <%= typeof location !== 'undefined' && location === 'Tsuwano' ? 'selected' : '' %>>津和野町</option>
+                        <option value="Yoshika" <%= typeof location !== 'undefined' && location === 'Yoshika' ? 'selected' : '' %>>吉賀町</option>
+                        <option value="Ama" <%= typeof location !== 'undefined' && location === 'Ama' ? 'selected' : '' %>>海士町</option>
+                        <option value="Nishinoshima" <%= typeof location !== 'undefined' && location === 'Nishinoshima' ? 'selected' : '' %>>西ノ島町</option>
+                        <option value="Okinoshima" <%= typeof location !== 'undefined' && location === 'Okinoshima' ? 'selected' : '' %>>隠岐の島町</option>
+                        <option value="Chibu" <%= typeof location !== 'undefined' && location === 'Chibu' ? 'selected' : '' %>>知夫村</option>
+                    </select>
+                </div>
 
-    <button type="submit">絞り込む</button>
+                <div class="search-divider"></div>
+
+                <input 
+                    type="text" 
+                    name="search" 
+                    placeholder="観光地の名前、場所を検索..." 
+                    value="<%= typeof keyword !== 'undefined' ? keyword : '' %>"
+                    class="search-input"
+                >
+            </div>
+            <span class="search-icon">🔍</span>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-title">カテゴリーで絞り込み</div>
+            <div class="filter-options">
+                <label class="filter-label">
+                    <input type="checkbox" name="sea" value="1" <%= typeof sea !== 'undefined' && sea === '1' ? 'checked' : '' %> class="filter-checkbox">
+                    <span class="filter-text">🌊 海沿い</span>
+                </label>
+                <label class="filter-label">
+                    <input type="checkbox" name="rest" value="1" <%= typeof rest !== 'undefined' && rest === '1' ? 'checked' : '' %> class="filter-checkbox">
+                    <span class="filter-text">☕ 休憩所</span>
+                </label>
+                <label class="filter-label">
+                    <input type="checkbox" name="onsen" value="1" <%= typeof onsen !== 'undefined' && onsen === '1' ? 'checked' : '' %> class="filter-checkbox">
+                    <span class="filter-text">♨️ 温泉</span>
+                </label>
+                <label class="filter-label">
+                    <input type="checkbox" name="mountain" value="1" <%= typeof mountain !== 'undefined' && mountain === '1' ? 'checked' : '' %> class="filter-checkbox">
+                    <span class="filter-text">⛰️ 山・自然</span>
+                </label>
+                <label class="filter-label">
+                    <input type="checkbox" name="history" value="1" <%= typeof history !== 'undefined' && history === '1' ? 'checked' : '' %> class="filter-checkbox">
+                    <span class="filter-text">⛩️ 歴史</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="search-actions">
+            <button type="submit" class="btn-search">検索 (Search)</button>
+            <a href="/all-destinations" class="btn-reset">リセット (Reset)</a>
+        </div>
+    </div>
 </form>
+        
         
         <div class="travel-grid" style="margin-top: 30px;">
             <% if (travels.length > 0) { %>
@@ -159,6 +224,21 @@
             loader.style.opacity = '0';
             setTimeout(() => loader.style.display = 'none', 500);
         }, 800); // Cho mèo nhảy lâu hơn chút như bạn muốn
+    });
+</script>
+<script>
+    const locationSelect = document.querySelector('select[name="location"]');
+    const searchInput = document.querySelector('input[name="search"]');
+
+    locationSelect.addEventListener('change', function() {
+        // Nếu người dùng chọn một nơi cụ thể (khác "all")
+        if (this.value !== 'all') {
+            // Lấy văn bản hiển thị (ví dụ: "川本町 (Kawamoto)") thay vì giá trị "Kawamoto"
+            const selectedText = this.options[this.selectedIndex].text;
+            searchInput.value = selectedText; 
+        } else {
+            searchInput.value = ''; // Nếu chọn "Tất cả" thì xóa trắng ô tìm kiếm
+        }
     });
 </script>
 </body>

@@ -58,29 +58,25 @@
                 <div class="location-select-wrapper">
                     <select name="location" class="location-dropdown-modern">
                         <option value="all" <%= typeof location !== 'undefined' && location === 'all' ? 'selected' : '' %>>エリア情報:全ての観光地 </option>
-                        <option value="Matsue" <%= typeof location !== 'undefined' && location === 'Matsue' ? 'selected' : '' %>>松江</option>
-                        <option value="Yasugi" <%= typeof location !== 'undefined' && location === 'Yasugi' ? 'selected' : '' %>>安来</option>
-                        <option value="Hamada" <%= typeof location !== 'undefined' && location === 'Hamada' ? 'selected' : '' %>>浜田</option>
-                        <option value="Masuda" <%= typeof location !== 'undefined' && location === 'Masuda' ? 'selected' : '' %>>益田</option>
-                        <option value="Matsue" <%= typeof location !== 'undefined' && location === 'Matsue' ? 'selected' : '' %>>松江市</option>
-                        <option value="Izumo" <%= typeof location !== 'undefined' && location === 'Izumo' ? 'selected' : '' %>>出雲市</option>
-                        <option value="Hamada" <%= typeof location !== 'undefined' && location === 'Hamada' ? 'selected' : '' %>>浜田市</option>
-                        <option value="Masuda" <%= typeof location !== 'undefined' && location === 'Masuda' ? 'selected' : '' %>>益田市</option>
-                        <option value="Oda" <%= typeof location !== 'undefined' && location === 'Oda' ? 'selected' : '' %>>大田市</option>
-                        <option value="Yasugi" <%= typeof location !== 'undefined' && location === 'Yasugi' ? 'selected' : '' %>>安来市</option>
-                        <option value="Gotsu" <%= typeof location !== 'undefined' && location === 'Gotsu' ? 'selected' : '' %>>江津市</option>
-                        <option value="Unnan" <%= typeof location !== 'undefined' && location === 'Unnan' ? 'selected' : '' %>>雲南市</option>
-                        <option value="Okuizumo" <%= typeof location !== 'undefined' && location === 'Okuizumo' ? 'selected' : '' %>>奥出雲町</option>
-                        <option value="Iinan" <%= typeof location !== 'undefined' && location === 'Iinan' ? 'selected' : '' %>>飯南町</option>
-                        <option value="Kawamoto" <%= typeof location !== 'undefined' && location === 'Kawamoto' ? 'selected' : '' %>>川本町</option>
-                        <option value="Misato" <%= typeof location !== 'undefined' && location === 'Misato' ? 'selected' : '' %>>美郷町</option>
-                        <option value="Ohnan" <%= typeof location !== 'undefined' && location === 'Ohnan' ? 'selected' : '' %>>邑南町</option>
-                        <option value="Tsuwano" <%= typeof location !== 'undefined' && location === 'Tsuwano' ? 'selected' : '' %>>津和野町</option>
-                        <option value="Yoshika" <%= typeof location !== 'undefined' && location === 'Yoshika' ? 'selected' : '' %>>吉賀町</option>
-                        <option value="Ama" <%= typeof location !== 'undefined' && location === 'Ama' ? 'selected' : '' %>>海士町</option>
-                        <option value="Nishinoshima" <%= typeof location !== 'undefined' && location === 'Nishinoshima' ? 'selected' : '' %>>西ノ島町</option>
-                        <option value="Okinoshima" <%= typeof location !== 'undefined' && location === 'Okinoshima' ? 'selected' : '' %>>隠岐の島町</option>
-                        <option value="Chibu" <%= typeof location !== 'undefined' && location === 'Chibu' ? 'selected' : '' %>>知夫村</option>
+                        <option value="島根県松江市" <%= typeof location !== 'undefined' && location === '島根県松江市' ? 'selected' : '' %>>松江市</option>
+                        <option value="島根県出雲市" <%= typeof location !== 'undefined' && location === '島根県出雲市' ? 'selected' : '' %>>出雲市</option>
+                        <option value="島根県浜田市" <%= typeof location !== 'undefined' && location === '島根県浜田市' ? 'selected' : '' %>>浜田市</option>
+                        <option value="島根県益田市" <%= typeof location !== 'undefined' && location === '島根県益田市' ? 'selected' : '' %>>益田市</option>
+                        <option value="島根県大田市" <%= typeof location !== 'undefined' && location === '島根県大田市' ? 'selected' : '' %>>大田市</option>
+                        <option value="島根県安来市" <%= typeof location !== 'undefined' && location === '島根県安来市' ? 'selected' : '' %>>安来市</option>
+                        <option value="島根県江津市" <%= typeof location !== 'undefined' && location === '島根県江津市' ? 'selected' : '' %>>江津市</option>
+                        <option value="島根県雲南市" <%= typeof location !== 'undefined' && location === '島根県雲南市' ? 'selected' : '' %>>雲南市</option>
+                        <option value="島根県奥出雲町" <%= typeof location !== 'undefined' && location === '島根県奥出雲町' ? 'selected' : '' %>>奥出雲町</option>
+                        <option value="島根県飯南町" <%= typeof location !== 'undefined' && location === '島根県飯南町' ? 'selected' : '' %>>飯南町</option>
+                        <option value="島根県川本町" <%= typeof location !== 'undefined' && location === '島根県川本町' ? 'selected' : '' %>>川本町</option>
+                        <option value="島根県美郷町" <%= typeof location !== 'undefined' && location === '島根県美郷町' ? 'selected' : '' %>>美郷町</option>
+                        <option value="島根県邑南町" <%= typeof location !== 'undefined' && location === '島根県邑南町' ? 'selected' : '' %>>邑南町</option>
+                        <option value="島根県津和野町" <%= typeof location !== 'undefined' && location === '島根県津和野町' ? 'selected' : '' %>>津和野町</option>
+                        <option value="島根県吉賀町" <%= typeof location !== 'undefined' && location === '島根県吉賀町' ? 'selected' : '' %>>吉賀町</option>
+                        <option value="島根県海士町" <%= typeof location !== 'undefined' && location === '島根県海士町' ? 'selected' : '' %>>海士町</option>
+                        <option value="島根県西ノ島町" <%= typeof location !== 'undefined' && location === '島根県西ノ島町' ? 'selected' : '' %>>西ノ島町</option>
+                        <option value="島根県隠岐の島町" <%= typeof location !== 'undefined' && location === '島根県隠岐の島町' ? 'selected' : '' %>>隠岐の島町</option>
+                        <option value="島根県知夫村" <%= typeof location !== 'undefined' && location === '島根県知夫村' ? 'selected' : '' %>>知夫村</option>
                     </select>
                 </div>
 
@@ -224,21 +220,6 @@
             loader.style.opacity = '0';
             setTimeout(() => loader.style.display = 'none', 500);
         }, 800); // Cho mèo nhảy lâu hơn chút như bạn muốn
-    });
-</script>
-<script>
-    const locationSelect = document.querySelector('select[name="location"]');
-    const searchInput = document.querySelector('input[name="search"]');
-
-    locationSelect.addEventListener('change', function() {
-        // Nếu người dùng chọn một nơi cụ thể (khác "all")
-        if (this.value !== 'all') {
-            // Lấy văn bản hiển thị (ví dụ: "川本町 (Kawamoto)") thay vì giá trị "Kawamoto"
-            const selectedText = this.options[this.selectedIndex].text;
-            searchInput.value = selectedText; 
-        } else {
-            searchInput.value = ''; // Nếu chọn "Tất cả" thì xóa trắng ô tìm kiếm
-        }
     });
 </script>
 </body>

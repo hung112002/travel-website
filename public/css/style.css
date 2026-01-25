@@ -166,12 +166,12 @@ a { text-decoration: none; color: inherit; }
     text-decoration: none;
     font-weight: 600;
     transition: all 0.3s;
-    border: 2px solid #d32f2f;
-    color: #d32f2f;
+    border: 2px solid #c5a059;
+    color: #c5a059;
     
 }
 .btn-login, .btn-member:hover {
-    background: #d32f2f;
+    background: #c5a059;
     color: #fff;
 }
 
@@ -186,11 +186,11 @@ a { text-decoration: none; color: inherit; }
     text-decoration: none;
     font-weight: 600;
     transition: all 0.3s;
-    border: 2px solid #d32f2f;
-    color: #d32f2f;
+    border: 2px solid #c5a059;
+    color: #c5a059;
 }
 .btn-logout:hover {
-    background: #d32f2f;
+    background: #c5a059;
     color: #fff;
 }
 .btn-logout {

@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>観光地編集</title>
+    <title>観光地編集 | Shimane Travel Admin</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
-<div id="page-loader" class="page-loader">
-    <div class="loader-content">
-        <img src="/images/shimanekko.png" alt="Loading..." class="shimanekko-loader">
-        <p class="loader-text">島根を探索中...</p>
-    </div>
-</div>
 <body class="admin-body">
+    <div id="page-loader" class="page-loader">
+        <div class="loader-content">
+            <img src="/images/shimanekko.png" alt="Loading..." class="shimanekko-loader">
+            <p class="loader-text">島根を探索中...</p>
+        </div>
+    </div>
+
     <header class="admin-header">
         <h1>管理ダッシュボード</h1>
         <nav>
@@ -22,105 +23,115 @@
     </header>
 
     <main class="admin-container">
-        <% if (travel) { %>
-            <h2>観光地を編集: <%= travel.name %></h2>
-        <% } else { %>
-            <h2>観光地を新規追加</h2>
-        <% } %>
+        <h2><%= travel ? '観光地を編集: ' + travel.name : '観光地を新規追加' %></h2>
 
-        <form 
-          class="admin-form"
-          action="<% if (travel) { %>/admin/edit/<%= travel.id %><% } else { %>/admin/add<% } %>" 
-          method="POST"
-        >
+        <form class="admin-form" action="<%= travel ? '/admin/edit/' + travel.id : '/admin/add' %>" method="POST">
+            
+            <fieldset class="form-section">
+                <legend>基本情報 (Thông tin cơ bản)</legend>
+                <div class="form-group">
+                    <label for="name">名前 (Tên địa danh):</label>
+                    <input type="text" id="name" name="name" value="<%= travel ? travel.name : '' %>" required>
+                </div>
+                <div class="form-group">
+                    <label for="location">場所 (Địa chỉ):</label>
+                    <input type="text" id="location" name="location" value="<%= travel ? travel.location : '' %>" placeholder="例: 島根県松江市...">
+                </div>
+                <div class="form-group">
+                    <label for="imageUrl">代表画像URL (URL ảnh chính):</label>
+                    <input type="text" id="imageUrl" name="imageUrl" value="<%= travel ? travel.imageUrl : '' %>">
+                </div>
+            </fieldset>
+
+            <fieldset class="form-section checkbox-grid">
+                <legend>カテゴリー (Phân loại)</legend>
+                <label><input type="checkbox" name="is_featured" value="1" <%= (travel && travel.is_featured) ? 'checked' : '' %>> おすすめ表示</label>
+                <label><input type="checkbox" name="has_beach" value="1" <%= (travel && travel.has_beach) ? 'checked' : '' %>> 🌊 海沿い</label>
+                <label><input type="checkbox" name="has_rest_stop" value="1" <%= (travel && travel.has_rest_stop) ? 'checked' : '' %>> ☕ 休憩所</label>
+                <label><input type="checkbox" name="isOnsen" value="1" <%= (travel && travel.isOnsen) ? 'checked' : '' %>> ♨️ 温泉</label>
+                <label><input type="checkbox" name="isMountain" value="1" <%= (travel && travel.isMountain) ? 'checked' : '' %>> ⛰️ 山・自然</label>
+                <label><input type="checkbox" name="isHistory" value="1" <%= (travel && travel.isHistory) ? 'checked' : '' %>> ⛩️ 歴史</label>
+            </fieldset>
+
+            <fieldset class="form-section">
+                <legend>詳細情報 (Thông tin chi tiết)</legend>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>営業時間 (Giờ mở cửa):</label>
+                        <input type="text" name="opening_hours" value="<%= travel ? travel.opening_hours : '' %>" placeholder="09:00 - 17:00">
+                    </div>
+                    <div class="form-group">
+                        <label>定休日 (Ngày nghỉ):</label>
+                        <input type="text" name="closed_days" value="<%= travel ? travel.closed_days : '' %>" placeholder="月曜日、年末年始">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>電話番号 (SĐT):</label>
+                        <input type="text" name="phone" value="<%= travel ? travel.phone : '' %>">
+                    </div>
+                    <div class="form-group">
+                        <label>公式サイト (Website):</label>
+                        <input type="text" name="website_url" value="<%= travel ? travel.website_url : '' %>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>アクセス (Cách đi lại):</label>
+                    <input type="text" name="access" value="<%= travel ? travel.access : '' %>">
+                </div>
+                <div class="form-group">
+                    <label>Google Maps Embed URL (Google Maps Embed Link):</label>
+                    <textarea name="map_iframe" rows="2" placeholder="Ví dụ: https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!..."><%= travel ? travel.map_iframe : '' %></textarea>
+                    <small style="color: #666; display: block; margin-top: 5px;">💡 Hướng dẫn: Trên Google Maps, bấm "Chia sẻ" → "Nhúng bản đồ" → Copy phần link từ src="..." (không cần copy cả thẻ iframe)</small>
+                </div>
+            </fieldset>
+
+            <fieldset class="form-section alert-fields">
+                <legend>お知らせ & ニュース (Thông báo & Tin tức)</legend>
+                <div class="form-group">
+                    <label style="color: #d32f2f;">⚠️ 重要なお知らせ (Thông báo khẩn):</label>
+                    <textarea name="notice_text" rows="2" placeholder="Ví dụ: Đóng cửa bảo trì ngày 25/1..."><%= travel ? travel.notice_text : '' %></textarea>
+                </div>
+                <div class="form-group">
+                    <label>最新ニュース (Tin tức mới):</label>
+                    <textarea name="news_update" rows="2"><%= travel ? travel.news_update : '' %></textarea>
+                </div>
+                <div class="form-group">
+                    <label>ベストシーズン (Mùa đẹp nhất):</label>
+                    <input type="text" name="best_season" value="<%= travel ? travel.best_season : '' %>" placeholder="例: 春 (4月上旬)">
+                </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+                <legend>フォトギャラリー (Thư viện ảnh - Dán URL)</legend>
+                <div class="form-group">
+                    <label>画像URLリスト (Mỗi URL một dòng):</label>
+                    <textarea name="gallery_urls" rows="5" placeholder="https://example.com/photo1.jpg&#10;https://example.com/photo2.jpg"><%= typeof current_gallery !== 'undefined' ? current_gallery : '' %></textarea>
+                </div>
+            </fieldset>
+
             <div class="form-group">
-                <label for="name">名前:</label>
-                <input type="text" id="name" name="name" value="<%= travel ? travel.name : '' %>" required>
-            </div>
-            <div class="form-group">
-                <label for="location">場所:</label>
-                <input type="text" id="location" name="location" value="<%= travel ? travel.location : '' %>">
-            </div>
-            <div class="form-group">
-                <label for="imageUrl">画像URL:</label>
-                <input type="text" id="imageUrl" name="imageUrl" value="<%= travel ? travel.imageUrl : '' %>">
+                <label for="description">紹介文 (Mô tả chi tiết):</label>
+                <textarea id="description" name="description" rows="8"><%= travel ? travel.description : '' %></textarea>
             </div>
 
-            <div class="form-group-checkbox">
-                <label for="is_featured">
-                    <input 
-                      type="checkbox" 
-                      id="is_featured" 
-                      name="is_featured" 
-                      value="1"
-                      <%= (travel && travel.is_featured) ? 'checked' : '' %>
-                    >
-                    おすすめ表示 
-                </label>
-            </div>
-
-            <div class="form-group-checkbox">
-                <label for="has_beach">
-                    <input type="checkbox" id="has_beach" name="has_beach" value="1" <%= (travel && travel.has_beach) ? 'checked' : '' %>>
-                    🌊 海沿い あり 
-                </label>
-            </div>
-
-            <div class="form-group-checkbox">
-                <label for="has_rest_stop">
-                    <input type="checkbox" id="has_rest_stop" name="has_rest_stop" value="1" <%= (travel && travel.has_rest_stop) ? 'checked' : '' %>>
-                    ☕ 休憩所あり 
-                </label>
-            </div>
-
-            <div class="form-group-checkbox">
-                <label for="isOnsen">
-                    <input type="checkbox" id="isOnsen" name="isOnsen" value="1" <%= (travel && travel.isOnsen) ? 'checked' : '' %>>
-                    ♨️ 温泉 あり 
-                </label>
-            </div>
-
-            <div class="form-group-checkbox">
-                <label for="isMountain">
-                    <input type="checkbox" id="isMountain" name="isMountain" value="1" <%= (travel && travel.isMountain) ? 'checked' : '' %>>
-                    ⛰️ 山・自然
-                </label>
-            </div>
-
-            <div class="form-group-checkbox">
-                <label for="isHistory">
-                    <input type="checkbox" id="isHistory" name="isHistory" value="1" <%= (travel && travel.isHistory) ? 'checked' : '' %>>
-                    ⛩️ 歴史
-                </label>
-            </div>
-
-            <div class="form-group">
-                <label for="description">詳細:</label>
-                <textarea id="description" name="description" rows="5"><%= travel ? travel.description : '' %></textarea>
-            </div>
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">
-                    <% if (travel) { %> 更新 <% } else { %> 追加 <% } %>
+                    <%= travel ? '更新 (Cập nhật)' : '追加 (Thêm mới)' %>
                 </button>
             </div>
         </form>
     </main>
+
     <script>
+        // Loader Shimanekko script
         window.addEventListener('load', function() {
-            // Tìm đến phần tử Loader bằng ID
             const loader = document.getElementById('page-loader');
-            
             if (loader) {
-                // Tạo hiệu ứng mờ dần (Fade out)
                 loader.style.opacity = '0';
-                
-                // Sau khi mờ hẳn (khoảng 0.5s), mới ẩn hoàn toàn khỏi layout
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                }, 500); 
+                setTimeout(() => { loader.style.display = 'none'; }, 500); 
             }
         });
     </script>
-    <script src="js/transition.js"></script>
 </body>
 </html>

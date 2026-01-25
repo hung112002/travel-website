@@ -13,73 +13,80 @@ const port = 3000;
 const storage = multer.diskStorage({
     destination: './public/uploads/',
     filename: (req, file, cb) => {
-        cb(null, 'avatar-' + Date.now() + path.extname(file.originalname));
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
 });
 const upload = multer({ storage: storage });
+
 // ===============================================================
-// 1) CONNECT DB + INIT TABLES + SEED USERS
+// 2) KẾT NỐI DB + KHỞI TẠO BẢNG + NÂNG CẤP CẤU TRÚC
 // ===============================================================
 const db = new sqlite3.Database("./travel.db", (err) => {
-  if (err) return console.error("DB connect error:", err.message);
-  console.log("✅ Connected to travel.db");
+    if (err) return console.error("DB connect error:", err.message);
+    console.log("✅ Connected to travel.db");
 
-  db.serialize(() => {
-    // SỬA LỖI TẠI ĐÂY: Thêm dấu phẩy sau cột avatar
-    db.run(`
-      CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT,
-        email TEXT UNIQUE,
-        password TEXT,
-        role TEXT DEFAULT 'user',
-        avatar TEXT DEFAULT '/images/default-avatar.png',
-        reset_token TEXT
-      )
-    `);
+    db.serialize(() => {
+        // Bảng Users
+        db.run(`CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT,
+            email TEXT UNIQUE,
+            password TEXT,
+            role TEXT DEFAULT 'user',
+            avatar TEXT DEFAULT '/images/default-avatar.png',
+            reset_token TEXT
+        )`);
 
-    // Lệnh nâng cấp bảng nếu đã có DB cũ
-    db.run("ALTER TABLE users ADD COLUMN avatar TEXT DEFAULT '/images/default-avatar.png'", (err) => {
-        if (err) { /* Cột đã tồn tại */ }
-        else console.log("✅ Đã nâng cấp bảng users: Thêm cột avatar.");
+        // Bảng Destinations (Với đầy đủ 19 cột thông tin)
+        db.run(`CREATE TABLE IF NOT EXISTS destinations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            location TEXT,
+            description TEXT,
+            imageUrl TEXT,
+            has_beach INTEGER DEFAULT 0,
+            has_rest_stop INTEGER DEFAULT 0,
+            is_featured INTEGER DEFAULT 0,
+            isOnsen INTEGER DEFAULT 0,
+            isMountain INTEGER DEFAULT 0,
+            isHistory INTEGER DEFAULT 0
+        )`);
+
+        // TỰ ĐỘNG NÂNG CẤP CÁC CỘT MỚI (Tránh lỗi nếu cột đã tồn tại)
+        const columnsToAdd = [
+            "opening_hours", "closed_days", "phone", "access", 
+            "website_url", "map_iframe", "notice_text", 
+            "best_season", "news_update"
+        ];
+        columnsToAdd.forEach(col => {
+            db.run(`ALTER TABLE destinations ADD COLUMN ${col} TEXT`, (err) => {
+                if (!err) console.log(`✅ Đã thêm cột: ${col}`);
+            });
+        });
+
+        // Bảng Gallery (Lưu hơn 5 ảnh cho mỗi nơi)
+        db.run(`CREATE TABLE IF NOT EXISTS destination_images (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            destination_id INTEGER,
+            image_url TEXT,
+            FOREIGN KEY (destination_id) REFERENCES destinations(id)
+        )`);
+
+        // Bảng Favorites
+        db.run(`CREATE TABLE IF NOT EXISTS favorites (
+            user_id INTEGER,
+            destination_id INTEGER,
+            PRIMARY KEY (user_id, destination_id)
+        )`);
+
+        // SEED USERS (Bcrypt Hashing)
+        const seedInitialUsers = async () => {
+            const hashedPass = await bcrypt.hash('123', saltRounds);
+            db.run("UPDATE users SET password = ? WHERE email = ?", [hashedPass, 'admin@gmail.com']);
+            db.run("UPDATE users SET password = ? WHERE email = ?", [hashedPass, 'user@gmail.com']);
+        };
+        seedInitialUsers();
     });
-
-    db.run(`
-      CREATE TABLE IF NOT EXISTS destinations (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        location TEXT,
-        description TEXT,
-        imageUrl TEXT,
-        has_beach INTEGER DEFAULT 0,
-        has_rest_stop INTEGER DEFAULT 0,
-        is_featured INTEGER DEFAULT 0,
-        isOnsen INTEGER DEFAULT 0,
-        isMountain INTEGER DEFAULT 0,
-        isHistory INTEGER DEFAULT 0
-      )
-    `);
-
-    db.run(`
-      CREATE TABLE IF NOT EXISTS favorites (
-        user_id INTEGER,
-        destination_id INTEGER,
-        PRIMARY KEY (user_id, destination_id)
-      )
-    `);
-
-    // Seed users với Bcrypt
-    const seedInitialUsers = async () => {
-        const hashedPass = await bcrypt.hash('123', saltRounds);
-        db.run("UPDATE users SET password = ? WHERE email = ?", [hashedPass, 'admin@gmail.com'], (err) => {
-        if (!err) console.log("✅ Đã cập nhật mật khẩu Bcrypt cho Admin.");
-    });
-        db.run("UPDATE users SET password = ? WHERE email = ?", [hashedPass, 'user@gmail.com'], (err) => {
-        if (!err) console.log("✅ Đã cập nhật mật khẩu Bcrypt cho User thường.");
-    });
-};
-seedInitialUsers();
-  });
 });
 
 // ===============================================================
@@ -129,19 +136,10 @@ function checkAuth(req, res, next) {
   // If API -> return JSON (avoid returning HTML that breaks response.json())
   if (isApiRequest(req)) return res.status(401).json({ error: "ログインしていません。" });
 
-  req.session.save((err) => {
-    if (err) return next(err);
-    res.redirect('/profile'); // Chỉ chuyển trang sau khi session đã lưu xong
-});
-
   // Normal pages -> redirect
   return res.redirect("/login");
 }
 
-function checkAdmin(req, res, next) {
-  if (req.session?.user?.role === "admin") return next();
-  return res.status(403).send("管理者権限がありません。");
-}
 function checkAdmin(req, res, next) {
     // Kiểm tra xem đã đăng nhập chưa VÀ role có phải admin không
     if (req.session.isLoggedIn && req.session.user && req.session.user.role === 'admin') {
@@ -251,7 +249,12 @@ app.get("/travel/:id", (req, res) => {
   db.get("SELECT * FROM destinations WHERE id = ?", [req.params.id], (err, row) => {
     if (err) return res.status(500).send(err.message);
     if (!row) return res.status(404).send("Không tìm thấy địa điểm");
-    res.render("PopShelfDetail", { travel: row });
+    
+    // Lấy ảnh phụ từ bảng destination_images
+    db.all("SELECT * FROM destination_images WHERE destination_id = ?", [req.params.id], (err2, images) => {
+      if (err2) images = [];
+      res.render("PopShelfDetail", { travel: row, images: images || [] });
+    });
   });
 });
 
@@ -492,12 +495,23 @@ app.post("/admin/add", checkAuth, checkAdmin, (req, res) => {
     isOnsen,
     isMountain,
     isHistory,
+    opening_hours,
+    closed_days,
+    phone,
+    access,
+    website_url,
+    map_iframe,
+    notice_text,
+    best_season,
+    news_update,
+    gallery_urls
   } = req.body;
 
   const sql = `
     INSERT INTO destinations
-    (name, location, description, imageUrl, has_beach, has_rest_stop, is_featured, isOnsen, isMountain, isHistory)
-    VALUES (?,?,?,?,?,?,?,?,?,?)
+    (name, location, description, imageUrl, has_beach, has_rest_stop, is_featured, isOnsen, isMountain, isHistory,
+     opening_hours, closed_days, phone, access, website_url, map_iframe, notice_text, best_season, news_update)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
   `;
 
   db.run(
@@ -507,15 +521,37 @@ app.post("/admin/add", checkAuth, checkAdmin, (req, res) => {
       location,
       description,
       imageUrl,
-      has_beach || 0,
-      has_rest_stop || 0,
-      is_featured || 0,
-      isOnsen || 0,
-      isMountain || 0,
-      isHistory || 0,
+      has_beach ? 1 : 0,
+      has_rest_stop ? 1 : 0,
+      is_featured ? 1 : 0,
+      isOnsen ? 1 : 0,
+      isMountain ? 1 : 0,
+      isHistory ? 1 : 0,
+      opening_hours || '',
+      closed_days || '',
+      phone || '',
+      access || '',
+      website_url || '',
+      map_iframe || '',
+      notice_text || '',
+      best_season || '',
+      news_update || ''
     ],
-    (err) => {
+    function(err) {
       if (err) return res.status(500).send(err.message);
+      
+      // Lấy ID của địa điểm vừa được tạo
+      const newId = this.lastID;
+      
+      // Xử lý gallery_urls nếu có
+      if (gallery_urls) {
+        const urlList = gallery_urls.split(/[\n,]+/).map(url => url.trim()).filter(url => url !== "");
+        const gallerySql = "INSERT INTO destination_images (destination_id, image_url) VALUES (?, ?)";
+        urlList.forEach(url => {
+          db.run(gallerySql, [newId, url]);
+        });
+      }
+      
       res.redirect("/admin");
     }
   );
@@ -524,51 +560,86 @@ app.post("/admin/add", checkAuth, checkAdmin, (req, res) => {
 app.get("/admin/edit/:id", checkAuth, checkAdmin, (req, res) => {
   db.get("SELECT * FROM destinations WHERE id = ?", [req.params.id], (err, row) => {
     if (err) return res.status(500).send(err.message);
-    res.render("admin_PopShelfEdit", { travel: row });
+    
+    // Lấy danh sách ảnh gallery cũ
+    db.all("SELECT image_url FROM destination_images WHERE destination_id = ?", [req.params.id], (err2, images) => {
+      const current_gallery = (images || []).map(img => img.image_url).join('\n');
+      res.render("admin_PopShelfEdit", { travel: row, current_gallery });
+    });
   });
 });
 
+// Route xử lý cập nhật địa điểm dùng URL ảnh
 app.post("/admin/edit/:id", checkAuth, checkAdmin, (req, res) => {
-  const {
-    name,
-    location,
-    description,
-    imageUrl,
-    is_featured,
-    has_beach,
-    has_rest_stop,
-    isOnsen,
-    isMountain,
-    isHistory,
-  } = req.body;
-
-  const sql = `
-    UPDATE destinations
-    SET name=?, location=?, description=?, imageUrl=?,
-        has_beach=?, has_rest_stop=?, is_featured=?, isOnsen=?, isMountain=?, isHistory=?
-    WHERE id=?
-  `;
-
-  db.run(
-    sql,
-    [
-      name,
-      location,
-      description,
-      imageUrl,
-      has_beach || 0,
-      has_rest_stop || 0,
-      is_featured || 0,
-      isOnsen || 0,
-      isMountain || 0,
-      isHistory || 0,
-      req.params.id,
-    ],
-    (err) => {
-      if (err) return res.status(500).send(err.message);
-      res.redirect("/admin");
+    const id = req.params.id;
+    
+    // DEBUG: In toàn bộ dữ liệu nhận được
+    console.log("DEBUG: Form data received:", req.body);
+    
+    // 1. Lấy toàn bộ dữ liệu từ Form (bao gồm cả các URL ảnh)
+    let { 
+        name, location, description, 
+        imageUrl, // URL ảnh chính của địa điểm
+        gallery_urls, // Danh sách các URL ảnh thư viện (cách nhau bằng dấu phẩy hoặc xuống dòng)
+        has_beach, has_rest_stop, is_featured, isOnsen, isMountain, isHistory,
+        opening_hours, closed_days, phone, access, website_url,
+        map_iframe, // Maps URL hoặc iframe tag
+        notice_text, best_season, news_update 
+    } = req.body;
+    
+    // XỬ LÝ: Nếu map_iframe là iframe tag HTML, extract URL từ src
+    if (map_iframe && map_iframe.includes('<iframe')) {
+        const srcMatch = map_iframe.match(/src="([^"]+)"/);
+        if (srcMatch) {
+            map_iframe = srcMatch[1];
+        }
     }
-  );
+    
+    console.log("DEBUG: Extracted values:", { opening_hours, closed_days, phone, access, website_url, notice_text, best_season, news_update, map_iframe });
+
+    // 2. Câu lệnh SQL Update cho 19 cột thông tin
+    const sqlUpdate = `
+        UPDATE destinations SET 
+            name = ?, location = ?, description = ?, imageUrl = ?,
+            has_beach = ?, has_rest_stop = ?, is_featured = ?, 
+            isOnsen = ?, isMountain = ?, isHistory = ?,
+            opening_hours = ?, closed_days = ?, phone = ?, 
+            access = ?, website_url = ?, map_iframe = ?,
+            notice_text = ?, best_season = ?, news_update = ?
+        WHERE id = ?
+    `;
+
+    const params = [
+        name, location, description, imageUrl,
+        has_beach === "1" ? 1 : 0, has_rest_stop === "1" ? 1 : 0, is_featured === "1" ? 1 : 0,
+        isOnsen === "1" ? 1 : 0, isMountain === "1" ? 1 : 0, isHistory === "1" ? 1 : 0,
+        opening_hours || '', closed_days || '', phone || '', access || '', website_url || '', map_iframe || '',
+        notice_text || '', best_season || '', news_update || '', id
+    ];
+
+    db.run(sqlUpdate, params, function(err) {
+        if (err) {
+            console.error("❌ Lỗi Update Destination:", err.message);
+            return res.status(500).send("Lỗi cập nhật dữ liệu: " + err.message);
+        }
+
+        // 3. Xử lý Thư viện ảnh (Gallery) từ danh sách URL
+        if (gallery_urls) {
+            // Tách các URL bằng dấu phẩy hoặc xuống dòng
+            const urlList = gallery_urls.split(/[\n,]+/).map(url => url.trim()).filter(url => url !== "");
+            
+            // Xóa ảnh cũ của địa điểm này trước khi thêm mới (tùy chọn)
+            db.run("DELETE FROM destination_images WHERE destination_id = ?", [id], () => {
+                const gallerySql = "INSERT INTO destination_images (destination_id, image_url) VALUES (?, ?)";
+                urlList.forEach(url => {
+                    db.run(gallerySql, [id, url]);
+                });
+            });
+        }
+
+        console.log(`✅ Đã cập nhật thành công địa điểm ID: ${id}`);
+        res.redirect("/admin");
+    });
 });
 
 app.post("/admin/delete/:id", checkAuth, checkAdmin, (req, res) => {

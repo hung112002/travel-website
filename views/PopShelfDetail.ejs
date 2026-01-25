@@ -52,67 +52,111 @@
     </header>
 
     <main class="detail-container" style="max-width: 1000px; margin: 120px auto 50px auto; padding: 0 20px;">
-        <% if (travel) { %>
-            <div class="detail-hero-section">
-                <div class="detail-hero-content">
-                    <p class="detail-hero-tag" style="color: #c5a059; font-weight: bold;"><%= travel.location %></p>
-                    <h1 style="font-family: 'Noto Serif JP', serif; font-size: 2.5rem; margin-bottom: 20px;"><%= travel.name %></h1>
-                    <pre class="detail-hero-desc" style="white-space: pre-wrap; font-family: 'Noto Sans JP', sans-serif; line-height: 1.8; margin-bottom: 30px;"><%= travel.description %></pre>
-                    
-                    <div class="fav-action-container" style="margin: 20px 0;">
-                        <button id="favBtn" class="btn-luxury" style="width: auto; padding: 12px 25px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: #0c1a32; color: #c5a059; border: 1px solid #c5a059; border-radius: 4px; font-weight: bold;">
-                            <span id="favIcon">❤️</span> <span id="favText">お気に入りに追加</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="detail-hero-image" style="margin-top: 30px;">
-                    <img src="<%= travel.imageUrl || 'https://via.placeholder.com/600' %>" alt="<%= travel.name %>" style="width: 100%; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                </div>
-            </div>
-
-            <div class="detail-info-section" style="display: flex; gap: 40px; margin-top: 60px; flex-wrap: wrap;">
-                <div class="detail-map" style="flex: 1; min-width: 300px;">
-                    <iframe 
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d104118.44199516624!2d133.0041045!3d35.4582104!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x355704f6937e2837%3A0x6731e84a2f84c98e!2sShimane%2C%20Japan!5e0!3m2!1sen!2s!4v1705300000000!5m2!1sen!2s" 
-                      width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy">
-                    </iframe>
-                </div>
-                <div class="detail-info-list" style="flex: 1; min-width: 300px; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-                    <h2 style="font-family: 'Noto Serif JP', serif; border-bottom: 2px solid #c5a059; padding-bottom: 10px; margin-bottom: 20px;">基本情報</h2>
-                    <dl style="display: grid; grid-template-columns: 100px 1fr; gap: 15px;">
-                        <dt style="font-weight: bold; color: #666;">住所</dt>
-                        <dd><%= travel.location %></dd>
-
-                        <dt style="font-weight: bold; color: #666;">営業時間</dt>
-                        <dd>09:00 - 18:00</dd>
-                        
-                        <dt style="font-weight: bold; color: #666;">定休日</dt>
-                        <dd>第2火曜日・祝日</dd>
-
-                        <dt style="font-weight: bold; color: #666;">電話番号</dt>
-                        <dd>--- (不明) ---</dd>
-                        <dt style="font-weight: bold; color: #666;">アクセス</dt>
-                        <dd>09:00 - 18:00</dd>
-                        
-                        <dt style="font-weight: bold; color: #fb6666;">ホームページ</dt>
-                        <dd>https://www.sandmuseum.jp/</dd>
-
-                        <dt style="font-weight: bold; color: #000000;">訪問頃</dt>
-                        <dd>--- (不明) ---</dd>
-                        
-                        
-                    </dl>
-                </div>
-            </div>
-
-        <% } else { %>
-            <div style="text-align: center; padding: 100px 0;">
-                <h1 style="color: #666;">場所が見つかりません</h1>
-                <p>お探しの場所は存在しません。</p>
-                <a href="/" style="color: #c5a059;">ホームに戻る</a>
+    <% if (travel) { %>
+        <% if (travel.notice_text) { %>
+            <div class="alert-box" style="background: #fff3f3; border-left: 5px solid #d32f2f; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+                <h4 style="color: #d3a72f; margin: 0;">⚠️ 【重要なお知らせ】</h4>
+                <p style="margin: 5px 0 0 0; font-size: 0.95rem;"><%= travel.notice_text %></p>
             </div>
         <% } %>
-    </main>
+
+        <div class="detail-hero-section">
+            <div class="detail-hero-content">
+                <p class="detail-hero-tag" style="color: #c5a059; font-weight: bold;">
+                    <%= travel.location %> 
+                    <% if (travel.best_season) { %> | 🌸 <%= travel.best_season %><% } %>
+                </p>
+                <h1 style="font-family: 'Noto Serif JP', serif; font-size: 2.5rem; margin-bottom: 20px;"><%= travel.name %></h1>
+                <pre class="detail-hero-desc" style="white-space: pre-wrap; font-family: 'Noto Sans JP', sans-serif; line-height: 1.8; margin-bottom: 30px;"><%= travel.description %></pre>
+                
+                <div class="fav-action-container" style="margin: 20px 0;">
+                    <button id="favBtn" class="btn-luxury" style="width: auto; padding: 12px 25px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: #0c1a32; color: #c5a059; border: 1px solid #c5a059; border-radius: 4px; font-weight: bold;">
+                        <span id="favIcon">❤️</span> <span id="favText">お気に入りに追加</span>
+                    </button>
+                </div>
+            </div>
+            <div class="detail-hero-image" style="margin-top: 30px;">
+                <img src="<%= travel.imageUrl || 'https://via.placeholder.com/600' %>" alt="<%= travel.name %>" style="width: 100%; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            </div>
+        </div>
+
+        <div class="detail-info-section" style="display: flex; gap: 40px; margin-top: 60px; flex-wrap: wrap;">
+            <div class="detail-map" style="flex: 1; min-width: 300px;">
+                <% if (travel.map_iframe) { %>
+                    <iframe 
+                      src="<%= travel.map_iframe %>" 
+                      width="100%" height="450" style="border:0; border-radius: 8px;" allowfullscreen="" loading="lazy">
+                    </iframe>
+                <% } else { %>
+                    <div style="height: 450px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                        地図情報がありません
+                    </div>
+                <% } %>
+            </div>
+
+            <div class="detail-info-list" style="flex: 1; min-width: 300px; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <h2 style="font-family: 'Noto Serif JP', serif; border-bottom: 2px solid #c5a059; padding-bottom: 10px; margin-bottom: 20px; color: #333;">基本情報</h2>
+                <dl style="display: grid; grid-template-columns: 110px 1fr; gap: 15px 20px;">
+                    <dt style="font-weight: 600; color: #555; font-size: 0.95rem;">住所</dt>
+                    <dd style="color: #333; font-size: 0.95rem;"><%= travel.location %></dd>
+
+                    <dt style="font-weight: 600; color: #555; font-size: 0.95rem;">営業時間</dt>
+                    <dd style="color: <% if (travel.opening_hours) { %>#333<% } else { %>#999<% } %>; font-size: 0.95rem;">
+                        <%= travel.opening_hours || '情報未登録' %>
+                    </dd>
+                    
+                    <dt style="font-weight: 600; color: #555; font-size: 0.95rem;">定休日</dt>
+                    <dd style="color: <% if (travel.closed_days) { %>#333<% } else { %>#999<% } %>; font-size: 0.95rem;">
+                        <%= travel.closed_days || '情報未登録' %>
+                    </dd>
+
+                    <dt style="font-weight: 600; color: #555; font-size: 0.95rem;">電話番号</dt>
+                    <dd style="color: <% if (travel.phone) { %>#c5a059<% } else { %>#999<% } %>; font-size: 0.95rem;">
+                        <% if (travel.phone) { %>
+                            <a href="tel:<%= travel.phone %>" style="color: #c5a059; text-decoration: none;"><%= travel.phone %></a>
+                        <% } else { %>
+                            情報未登録
+                        <% } %>
+                    </dd>
+
+                    <dt style="font-weight: 600; color: #555; font-size: 0.95rem;">アクセス</dt>
+                    <dd style="color: <% if (travel.access) { %>#333<% } else { %>#999<% } %>; font-size: 0.95rem;">
+                        <%= travel.access || '情報未登録' %>
+                    </dd>
+                    
+                    <dt style="font-weight: 600; color: #555; font-size: 0.95rem;">公式サイト</dt>
+                    <dd style="font-size: 0.95rem;">
+                        <% if (travel.website_url) { %>
+                            <a href="<%= travel.website_url %>" target="_blank" rel="noopener noreferrer" style="color: #c5a059; text-decoration: underline; word-break: break-all;"><%= travel.website_url %></a>
+                        <% } else { %>
+                            <span style="color: #999;">情報未登録</span>
+                        <% } %>
+                    </dd>
+
+                    <% if (travel.news_update) { %>
+                        <dt style="font-weight: 600; color: #d32f2f; font-size: 0.95rem;">📢 最新ニュース</dt>
+                        <dd style="color: #333; font-size: 0.95rem; background: #fff9f9; padding: 8px 10px; border-left: 3px solid #d32f2f;"><%= travel.news_update %></dd>
+                    <% } %>
+                </dl>
+            </div>
+        </div>
+
+        <% if (typeof images !== 'undefined' && images.length > 0) { %>
+            <div class="photo-gallery-section" style="margin-top: 60px;">
+                <h2 style="font-family: 'Noto Serif JP', serif; margin-bottom: 30px; text-align: center;">フォトギャラリー</h2>
+                <div class="gallery-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;">
+                    <% images.forEach(function(img) { %>
+                        <div class="gallery-item">
+                            <img src="<%= img.image_url %>" style="width: 100%; height: 200px; object-fit: cover; border-radius: 4px; transition: 0.3s; cursor: pointer;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        <% } %>
+
+    <% } else { %>
+        <% } %>
+</main>
 
     <section class="recommend-section" style="background: #f9f9f9; padding: 80px 0;">
         <div style="max-width: 1000px; margin: 0 auto; padding: 0 20px;">

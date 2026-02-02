@@ -157,6 +157,34 @@
                             <h3 style="font-size: 1rem; margin: 10px 0;">美肌の湯・温泉巡り</h3>
                         </div>
                     </a>
+                    <a href="/all-destinations" class="recommend-card" style="min-width: 250px; background: #fff; text-decoration: none; color: inherit; border-radius: 4px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                        <img src="https://www.kankou-shimane.com/jp/wp-content/uploads/2020/03/363-tamazukurionsen-006-e1584853822575.jpg" style="width: 100%; height: 150px; object-fit: cover;">
+                        <div class="recommend-content" style="padding: 15px;">
+                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">温泉</span>
+                            <h3 style="font-size: 1rem; margin: 10px 0;">美肌の湯・温泉巡り</h3>
+                        </div>
+                    </a>
+                    <a href="/all-destinations" class="recommend-card" style="min-width: 250px; background: #fff; text-decoration: none; color: inherit; border-radius: 4px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                        <img src="https://www.kankou-shimane.com/jp/wp-content/uploads/2020/03/363-tamazukurionsen-006-e1584853822575.jpg" style="width: 100%; height: 150px; object-fit: cover;">
+                        <div class="recommend-content" style="padding: 15px;">
+                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">温泉</span>
+                            <h3 style="font-size: 1rem; margin: 10px 0;">美肌の湯・温泉巡り</h3>
+                        </div>
+                    </a>
+                    <a href="/all-destinations" class="recommend-card" style="min-width: 250px; background: #fff; text-decoration: none; color: inherit; border-radius: 4px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                        <img src="https://www.kankou-shimane.com/jp/wp-content/uploads/2020/03/363-tamazukurionsen-006-e1584853822575.jpg" style="width: 100%; height: 150px; object-fit: cover;">
+                        <div class="recommend-content" style="padding: 15px;">
+                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">温泉</span>
+                            <h3 style="font-size: 1rem; margin: 10px 0;">美肌の湯・温泉巡り</h3>
+                        </div>
+                    </a>
+                    <a href="/all-destinations" class="recommend-card" style="min-width: 250px; background: #fff; text-decoration: none; color: inherit; border-radius: 4px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                        <img src="https://www.kankou-shimane.com/jp/wp-content/uploads/2020/03/363-tamazukurionsen-006-e1584853822575.jpg" style="width: 100%; height: 150px; object-fit: cover;">
+                        <div class="recommend-content" style="padding: 15px;">
+                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">温泉</span>
+                            <h3 style="font-size: 1rem; margin: 10px 0;">美肌の湯・温泉巡り</h3>
+                        </div>
+                    </a>
                 </div>
                 <button class="carousel-btn next" id="next-btn" style="position: absolute; right: -20px; top: 50%; z-index: 10; background: #fff; border: 1px solid #ddd; padding: 10px; cursor: pointer;">›</button>
             </div>
@@ -195,7 +223,7 @@
 
     favBtn.addEventListener('click', async () => {
       if (!isLoggedIn) {
-        alert("お気に入り機能を利用するにはログインが必要です。(Bạn cần đăng nhập để sử dụng tính năng này)");
+        alert("お気に入り機能を利用するにはログインが必要です。(You need to log in to use this feature.)");
         window.location.href = "/login";
         return;
       }
@@ -210,10 +238,10 @@
         const data = await res.json();
 
         if (data.status === 'liked') {
-          alert("お気に入りに追加しました！ (Đã thêm vào yêu thích)");
+          alert("お気に入りに追加しました！ (Added to favorites)");
           document.getElementById('favText').innerText = "お気に入りから削除";
         } else {
-          alert("お気に入りから削除しました。 (Đã xóa khỏi yêu thích)");
+          alert("お気に入りから削除しました。 (Removed from favorites)");
           document.getElementById('favText').innerText = "お気に入りに追加";
         }
       } catch (error) {
@@ -237,7 +265,6 @@
 </script>
 
 <script src="/js/transition.js"></script>
-</body>
 </html>
 </body>
 </html>

@@ -7,8 +7,7 @@ const bcrypt = require('bcrypt');
 const multer = require('multer');
 const saltRounds = 10;
 const app = express();
-const port = 3000;
-
+const port = process.env.PORT || 3000;
 
 const storage = multer.diskStorage({
     destination: './public/uploads/',
@@ -17,15 +16,12 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage });
-// ===============================================================
-// 1) CONNECT DB + INIT TABLES + SEED USERS
-// ===============================================================
-const db = new sqlite3.Database("./travel.db", (err) => {
-  if (err) return console.error("DB connect error:", err.message);
-  console.log("✅ Connected to travel.db");
+const dbPath = path.join(__dirname, 'travel.db');
+const db = new sqlite3.Database(dbPath, (err) => {
+    if (err) console.error("Lỗi kết nối Database:", err.message);
+    else console.log("Đã kết nối thành công tới travel.db");
 
   db.serialize(() => {
-    // SỬA LỖI TẠI ĐÂY: Thêm dấu phẩy sau cột avatar
     db.run(`
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,7 +34,6 @@ const db = new sqlite3.Database("./travel.db", (err) => {
       )
     `);
 
-    // Lệnh nâng cấp bảng nếu đã có DB cũ
     db.run("ALTER TABLE users ADD COLUMN avatar TEXT DEFAULT '/images/default-avatar.png'", (err) => {
         if (err) { /* Cột đã tồn tại */ }
         else console.log("✅ Đã nâng cấp bảng users: Thêm cột avatar.");
@@ -574,3 +569,4 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(port, () => console.log(`🚀 Server running: http://localhost:${port}`));
+module.exports = app;

@@ -8,14 +8,13 @@ const destinations = [
         location: "島根県松江市",
         description: "Hồ lớn thứ 7 ở Nhật Bản, nổi tiếng với cảnh hoàng hôn tuyệt đẹp và đặc sản hến Shijimi.",
         imageUrl: "/images/shinji-lake.jpg",
-        is_featured: 1, isOnsen: 0, isMountain: 0, isHistory: 0
+    
     },
     {
         name: "日本庭園 由志園 (Vườn Yuushien)",
         location: "島根県松江市八束町",
         description: "Khu vườn Nhật Bản nổi tiếng với hoa mẫu đơn nở quanh năm và lễ hội ánh sáng rực rỡ.",
         imageUrl: "/images/yuushien.jpg",
-        is_featured: 1, isOnsen: 0, isMountain: 0, isHistory: 0
     },
     {
         name: "日御碕神社 (Đền Hinomisaki)",
@@ -80,7 +79,6 @@ const destinations = [
         location: "島根県益田市",
         description: "Trung tâm văn hóa nghệ thuật với kiến trúc ngói đỏ Sekishu đặc trưng của vùng Iwami.",
         imageUrl: "/images/grand-toit.jpg",
-        is_featured: 0, isOnsen: 0, isMountain: 0, isHistory: 0
     },
 
     // VÙNG ĐẢO OKI
@@ -89,28 +87,25 @@ const destinations = [
         location: "島根県隠岐郡西ノ島町",
         description: "Vách đá Matengai hùng vĩ cao 257m và những đàn bò, ngựa gặm cỏ tự do.",
         imageUrl: "/images/kuniga.jpg",
-        is_featured: 1, isOnsen: 0, isMountain: 1, isHistory: 0
     },
     {
         name: "壇鏡の滝 (Thác Dangyo)",
         location: "島根県隠岐の島町",
         description: "Thác nước linh thiêng chảy qua mái đền, tạo nên khung cảnh huyền bí.",
         imageUrl: "/images/dangyo.jpg",
-        is_featured: 0, isOnsen: 0, isMountain: 1, isHistory: 1
     },
     {
         name: "岩倉の乳房杉 (Tuyết tùng Chichi-sugi)",
         location: "島根県隠岐の島町",
         description: "Cây tuyết tùng 800 năm tuổi với hình dáng kỳ lạ giống như bầu sữa mẹ.",
         imageUrl: "/images/chichi-sugi.jpg",
-        is_featured: 0, isOnsen: 0, isMountain: 1, isHistory: 0
+        
     },
     {
         name: "隠岐神社 (Đền Oki)",
         location: "島根県海士町",
         description: "Ngôi đền lịch sử thờ Thiên hoàng Go-Toba với con đường hoa anh đào tuyệt đẹp.",
         imageUrl: "/images/oki-shrine.jpg",
-        is_featured: 0, isOnsen: 0, isMountain: 0, isHistory: 1
     }
 ];
 

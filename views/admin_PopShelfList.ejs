@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Địa điểm</title>
+    <title>観光情報管理</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="admin-body">
@@ -29,10 +29,10 @@
                 <input 
                   type="text" 
                   name="search" 
-                  placeholder="Tìm kiếm tên, địa điểm..." 
+                  placeholder="キーワード, 地点..." 
                   value="<%= typeof keyword !== 'undefined' ? keyword : '' %>"
                 >
-                <button type="submit" class="btn">Tìm</button>
+                <button type="submit" class="btn">検索</button>
             </form>
             <a href="/admin/add" class="btn btn-primary">新しい場所を追加</a>
         </div>

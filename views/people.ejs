@@ -28,21 +28,26 @@
                     <span class="logo-text">Shimane<span>Travel</span></span>
                 </a>
             </div>
-            <nav class="main-nav">
-                <a href="/" class="nav-link-hover">ホーム</a>
-                <a href="/cuisine" class="nav-link-hover">グルメ</a>
-                <a href="/people" class="nav-link-hover">匠・人物</a>
-                <a href="/all-destinations" class="nav-link-hover">全ての観光地</a>
-                
+            <button class="hamburger-menu" id="hamburger-menu" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="nav-links" id="nav-links">
+                <a href="/" class="nav-item">ホーム</a>
+                <a href="/cuisine" class="nav-item">グルメ</a>
+                <a href="/people" class="nav-item">匠・人物</a>
+                <a href="/all-destinations" class="nav-item">全ての観光地</a>
+
                 <% if (user) { %>
                     <div class="user-actions">
-                        <a href="/profile" class="nav-link-profile">
+                        <a href="/profile" class="btn-member">
                             👤 <%= user.username %>
                         </a>
-                        <a href="/logout" class="nav-link-logout">ログアウト</a>
+                        <a href="/logout" class="btn-logout">ログアウト</a>
                     </div>
                 <% } else { %>
-                    <a href="/login" class="login-btn-premium">ログイン</a>
+                    <a href="/login" class="btn-member">ログイン</a>
                 <% } %>
             </nav>
         </div>
@@ -149,6 +154,7 @@
         }, 800); // Cho mèo nhảy lâu hơn chút như bạn muốn
     });
 </script>
+    <script src="/js/mobile-menu.js"></script>
     <script src="js/transition.js"></script>
 </body>
 </html>

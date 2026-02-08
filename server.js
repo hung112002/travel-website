@@ -67,6 +67,17 @@ const db = new sqlite3.Database("./travel.db", (err) => {
       )
     `);
 
+    db.run(`
+      CREATE TABLE IF NOT EXISTS contacts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        subject TEXT NOT NULL,
+        message TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
         // SEED USERS (Bcrypt Hashing)
         const seedInitialUsers = async () => {
             const hashedPass = await bcrypt.hash('123', saltRounds);
@@ -251,7 +262,24 @@ app.get("/people", (req, res) => res.render("people"));
 
 app.get("/shimane-history", (req, res) => res.render("shimane-history"));
 app.get("/contact", (req, res) => res.render("contact", { sent: false }));
-app.post("/contact", (req, res) => res.render("contact", { sent: true }));
+app.post("/contact", (req, res) => {
+  const { name, email, subject, message } = req.body;
+  
+  if (!name || !email || !subject || !message) {
+    return res.render("contact", { sent: false, error: "Vui lòng điền đầy đủ thông tin" });
+  }
+  
+  db.run(
+    "INSERT INTO contacts (name, email, subject, message) VALUES (?, ?, ?, ?)",
+    [name, email, subject, message],
+    (err) => {
+      if (err) {
+        return res.render("contact", { sent: false, error: "Lỗi khi gửi tin nhắn" });
+      }
+      res.render("contact", { sent: true });
+    }
+  );
+});
 
 // ===============================================================
 // 5) AUTH ROUTES

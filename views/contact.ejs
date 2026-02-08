@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>?????? | Shimane Travel</title>
+    <title> Shimane Travel</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Zen+Kurenaido&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -22,12 +22,12 @@
                 </a>
             </div>
             <nav class="main-nav">
-                <a href="/" class="nav-link-hover">???</a>
-                <a href="/all-destinations" class="nav-link-hover">???</a>
-                <a href="/cuisine" class="nav-link-hover">???</a>
-                <a href="/people" class="nav-link-hover">????</a>
-                <a href="/shimane-history" class="nav-link-hover">?????</a>
-                <a href="/contact" class="nav-link-hover">??????</a>
+                <a href="/" class="nav-link-hover">ホーム</a>
+                <a href="/all-destinations" class="nav-link-hover">全ての観光地</a>
+                <a href="/cuisine" class="nav-link-hover">グルメ</a>
+                <a href="/people" class="nav-link-hover">人脈</a>
+                <a href="/shimane-history" class="nav-link-hover">島根の歴史</a>
+                <a href="/contact" class="nav-link-hover">お問い合わせ</a>
             </nav>
         </div>
     </header>
@@ -36,8 +36,8 @@
         <section class="jp-hero">
             <div class="jp-hero-inner">
                 <p class="jp-eyebrow">SHIMANE MESSAGE</p>
-                <h1>??????</h1>
-                <p class="jp-lead">?????????????????????????<br>??????????????????</p>
+                <h1>お問い合わせ</h1>
+                <p class="jp-lead">お気軽にお問い合わせください。<br>皆様からのご連絡をお待ちしております。</p>
                 <div class="jp-stamp" aria-hidden="true">?</div>
             </div>
         </section>
@@ -45,65 +45,65 @@
         <section class="jp-contact-wrap">
             <div class="jp-contact-panel jp-reveal">
                 <div class="jp-panel-header">
-                    <h2>????</h2>
+                    <h2>連絡先</h2>
                     <p>Shimane Travel Desk</p>
                 </div>
                 <div class="jp-panel-body">
                     <div class="jp-info-row">
-                        <span class="jp-info-label">???</span>
-                        <span class="jp-info-value">?????? ?? 1-2-3</span>
+                        <span class="jp-info-label">住所</span>
+                        <span class="jp-info-value">島根県松江市1-2-3</span>
                     </div>
                     <div class="jp-info-row">
-                        <span class="jp-info-label">????</span>
-                        <span class="jp-info-value">09:00 - 18:00</span>
+                        <span class="jp-info-label">営業時間</span>
+                        <span class="jp-info-value">9:00 - 18:00</span>
                     </div>
                     <div class="jp-info-row">
-                        <span class="jp-info-label">???</span>
-                        <span class="jp-info-value">??????</span>
+                        <span class="jp-info-label">メール</span>
+                        <span class="jp-info-value">info@shimane-travel.jp</span>
                     </div>
                     <div class="jp-info-row">
-                        <span class="jp-info-label">??</span>
+                        <span class="jp-info-label">電話番号</span>
                         <span class="jp-info-value">0852-00-0000</span>
                     </div>
                     <div class="jp-info-row">
-                        <span class="jp-info-label">????</span>
-                        <span class="jp-info-value">1-2 ???</span>
+                        <span class="jp-info-label">FAX</span>
+                        <span class="jp-info-value">0852-00-0001</span>
                     </div>
                 </div>
                 <div class="jp-panel-footer">
-                    <p>??????????????????????????????</p>
+                    <p>島根専門ITデザインカレッジ</p>
                 </div>
             </div>
 
             <div class="jp-form-card jp-reveal" style="animation-delay: 0.1s;">
-                <h2>????????</h2>
+                <h2>お問い合わせフォーム</h2>
 
                 <% if (typeof sent !== 'undefined' && sent) { %>
-                    <div class="jp-success">?????????????????????????</div>
+                    <div class="jp-success">お問い合わせが送信されました。ありがとうございました。</div>
                 <% } %>
 
                 <form class="jp-form" action="/contact" method="POST">
                     <div class="jp-form-grid">
                         <label>
-                            ???
-                            <input type="text" name="name" placeholder="?: ?? ??" required>
+                            お名前
+                            <input type="text" name="name" placeholder="例: 山田 太郎" required>
                         </label>
                         <label>
-                            ???
+                            メールアドレス
                             <input type="email" name="email" placeholder="example@mail.com" required>
                         </label>
                     </div>
                     <label>
-                        ?????
-                        <input type="text" name="subject" placeholder="?: ???? / ?? / ????" required>
+                        件名
+                        <input type="text" name="subject" placeholder="例: 質問/予約/その他" required>
                     </label>
                     <label>
-                        ?????
-                        <textarea name="message" rows="6" placeholder="?????????????????????" required></textarea>
+                        メッセージ
+                        <textarea name="message" rows="6" placeholder="ご用件を詳しくご記入ください" required></textarea>
                     </label>
                     <div class="jp-form-actions">
-                        <span class="jp-note">????????????????????</span>
-                        <button type="submit" class="jp-btn">????</button>
+                        <span class="jp-note">※ 必須項目です</span>
+                        <button type="submit" class="jp-btn">送信</button>
                     </div>
                 </form>
             </div>
@@ -111,15 +111,15 @@
 
         <section class="jp-callout">
             <div class="jp-callout-inner">
-                <h3>?????????</h3>
-                <p>?????????????????????????????????</p>
+                <h3>お問い合わせ</h3>
+                <p>お気軽にご連絡ください。私たちは皆様の声を大切にしています。</p>
             </div>
         </section>
     </main>
 
     <footer class="site-footer">
         <div class="footer-logo">Shimane Travel</div>
-        <p class="footer-bottom">� 2025-2026 Shimane Travel Project</p>
+        <p class="footer-bottom">© 2025-2026 Shimane Travel Project</p>
     </footer>
 </body>
 </html>

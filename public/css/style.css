@@ -2225,6 +2225,16 @@ social-icons {
     color: var(--jp-red);
     margin-bottom: 8px;
 }
+.ja-kyaria {
+    font-size: 0.9rem;
+    display: inline-block;
+    letter-spacing: 0.2em;
+    color: var(--jp-red);
+    margin-bottom: 8px;
+    
+    
+    
+}
 
 .jp-heritage {
     margin-top: 50px;

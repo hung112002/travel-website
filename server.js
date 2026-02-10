@@ -214,8 +214,25 @@ app.get("/all-destinations", (req, res) => {
 
   // 3. THÊM MỚI: Lọc theo khu vực (Dropdown)
   if (location && location !== 'all') {
-    sql += " AND location = ?";
-    params.push(location);
+    const locationParam = location.trim();
+    const shortLocation = locationParam.replace(/^島根県/, "");
+    const compactLocation = locationParam.replace(/[ 　]/g, "");
+    const compactShortLocation = shortLocation.replace(/[ 　]/g, "");
+    const cityMatch = shortLocation.match(/.+?[市町村]/);
+    const cityToken = cityMatch ? cityMatch[0] : "";
+    // Dùng LIKE để khớp các địa chỉ đầy đủ trong DB + xử lý khoảng trắng/địa chỉ không chuẩn
+    sql += " AND (location LIKE ? OR location LIKE ? OR REPLACE(REPLACE(location,' ',''),'　','') LIKE ? OR REPLACE(REPLACE(location,' ',''),'　','') LIKE ?";
+    params.push(
+      `%${locationParam}%`,
+      `%${shortLocation}%`,
+      `%${compactLocation}%`,
+      `%${compactShortLocation}%`
+    );
+    if (cityToken) {
+      sql += " OR location LIKE ?";
+      params.push(`%${cityToken}%`);
+    }
+    sql += ")";
   }
 
   // 4. Giữ nguyên các bộ lọc đặc trưng cũ của bạn

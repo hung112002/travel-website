@@ -1,0 +1,115 @@
+<%- include('partials/header', { title: 'アクセス' }) %>
+
+<style>
+    .hero-access {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/images/0311-sinjiko-001.jpg');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        text-align: center;
+        padding: 100px 20px;
+    }
+    .page-header h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+    }
+    .page-header p {
+        font-size: 1.2rem;
+    }
+    .access-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+    .access-section {
+        margin-bottom: 50px;
+    }
+    .access-section h2 {
+        font-size: 2.2rem;
+        color: #c5a059;
+        border-bottom: 2px solid #c5a059;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    .access-section p, .access-section li {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #555;
+    }
+    .access-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    .transport-card {
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+    }
+    .transport-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+    .map-container {
+        text-align: center;
+        padding: 40px 20px;
+        background: #f4f4f4;
+    }
+    .map-container h2 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+    .map-container img {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+</style>
+
+<div class="hero-access">
+    <div class="page-header">
+        <h1>アクセス</h1>
+        <p>神々の国、島根への行き方</p>
+    </div>
+</div>
+
+<div class="access-container">
+    <div class="access-section">
+        <h2>島根への主な交通手段</h2>
+        <p>島根県は日本の中国地方に位置し、豊かな自然と歴史的な名所に恵まれています。県内には複数の空港や駅があり、東京、大阪、福岡などの主要都市からのアクセスも便利です。</p>
+        <div class="access-grid">
+            <div class="transport-card">
+                <h3>✈️ 飛行機</h3>
+                <p>出雲縁結び空港、萩・石見空港、隠岐世界ジオパーク空港の3つの空港があります。</p>
+            </div>
+            <div class="transport-card">
+                <h3>🚆 JR鉄道</h3>
+                <p>JR山陰本線が県内を横断。特急「やくも」で岡山からのアクセスが便利です。</p>
+            </div>
+            <div class="transport-card">
+                <h3>🚌 高速バス</h3>
+                <p>主要都市から松江、出雲、浜田などへの高速バス路線が多数運行しています。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="access-section">
+        <h2>主要都市からのアクセス</h2>
+        <ul>
+            <li><strong>東京から:</strong> 飛行機で約1時間30分（羽田 → 出雲/萩・石見）。夜行バスも利用可能です。</li>
+            <li><strong>大阪から:</strong> 飛行機で約1時間（伊丹 → 出雲/隠岐）。新幹線と特急を乗り継いで約3時間30分。高速バスで約4〜5時間。</li>
+            <li><strong>福岡から:</strong> 飛行機で約1時間（福岡 → 出雲）。高速バスで約4時間。</li>
+        </ul>
+    </div>
+
+    <div class="map-container">
+        <h2>島根県マップ</h2>
+        <img src="/shimane-map.svg" alt="島根県広域マップ">
+        <p style="margin-top: 15px; color: #666;">上記のマップは、主要な市町村と観光エリアの概略を示しています。</p>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

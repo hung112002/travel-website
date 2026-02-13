@@ -1,58 +1,4 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shimane Travel</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Noto+Serif+JP:wght@400;700;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
-
-</head>
-<body>
-<div id="page-loader" class="page-loader">
-    <div class="loader-content">
-        <img src="/images/shimanekko.png" alt="Loading..." class="shimanekko-loader">
-        <p class="loader-text">島根を探索中...</p>
-    </div>
-</div>
-
-<header class="main-header">
-    <div class="nav-container">
-        <div class="logo">
-            <a href="/">
-                <img src="/images/shimanekko.png" alt="Shimane Logo" class="nav-logo">
-                <span class="logo-text">Shimane<span>Travel</span></span>
-            </a>
-        </div>
-
-        <button class="hamburger-menu" id="hamburger-menu" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-
-        <nav class="nav-links" id="nav-links">
-            <li><a href="/" class="nav-item">ホーム</a></li>
-            <li><a href="/cuisine" class="nav-item">グルメ</a></li>
-            <li><a href="/people" class="nav-item">匠・人物</a></li>
-            <li><a href="/all-destinations" class="nav-item">全ての観光地</a></li>
-
-            <% if (user) { %>
-                <div class="user-actions">
-                    <a href="/profile" class="btn-member">
-                        👤 <%= user.username %>
-                    </a>
-                    <a href="/logout" class="btn-logout">ログアウト</a>
-                </div>
-            <% } else { %>
-                <a href="/login" class="btn-member">ログイン</a>
-            <% } %>
-        </nav>
-    </div>
-</header>
+<%- include('partials/header', { title: 'Shimane Travel' }) %>
 
 <div class="hero-section">
     <video autoplay loop muted playsinline class="hero-video">
@@ -216,7 +162,7 @@
          inkscape:connector-curvature="0" />
       <path class="shimane-area"
          id="34000"
-         d="m 303,584 1,-5 -7,-11 -1,5 -14,-1 4,8 -2,4 z m -28,0 v -1 l -7,1 z m -12,0 -1,-3 -2,2 v 1 z m 192,0 3,-9 -4,-3 -4,4 -4,8 z m -15,0 v -2 l -2,2 z m -199,0 11,-12 -5,-11 -5,7 -11,4 -7,12 z m 193,0 1,-5 -3,-1 -2,3 3,3 z m -29,-7 4,2 3,-5 z m -144,0 1,-2 -6,1 z m 175,-3 h 3 l -2,-4 z m 12,-7 -3,5 5,2 2,-7 -3,3 z m 47,4 v 1 z m 33,-2 -2,-10 -13,4 h -4 l 1,-3 -3,2 -6,17 9,4 z m 86,-80 h -6 z m 0,-49 -5,-9 2,-11 3,-4 z m -401,144 1,-2 2,-1 7,-4 1,-4 1,3 4,-3 4,-8 9,-9 3,-10 3,4 4,-1 -5,-3 h 7 l -1,-3 h -4 l 2,-1 6,-1 v -2 l 1,7 4,-2 v -4 l 8,-1 7,2 6,3 4,2 3,-2 7,-2 -1,-4 3,6 8,-1 4,-4 v 1 l 2,1 -2,1 -3,2 2,4 -3,2 1,-2 -3,-3 -3,5 4,2 -3,8 4,7 4,6 -1,11 z m 185,0 -2,-3 -3,3 z m -5,0 1,-4 -3,-7 12,2 1,-1 3,-13 6,-2 h 7 l 4,10 3,-2 7,-2 -2,-4 6,-2 3,-4 6,-1 1,-4 3,5 9,-6 5,2 7,1 3,-3 6,4 12,-2 12,-5 4,-18 -3,-3 3,1 v -2 l 1,3 10,4 10,-5 13,-4 15,-4 4,-5 -1,-5 5,5 -2,-7 9,6 h -3 l 2,5 -5,5 2,4 6,-4 v 3 l 1,4 v -1 h 7 l 6,5 7,-1 1,5 7,-1 6,-6 1,-16 3,-2 V 409 l -1,-1 -4,-3 -5,-13 -4,-9 4,-5 -2,-4 3,-11 1,-11 -8,-10 -6,-1 -2,-8 h -1 l 1,-1 -2,-4 -8,-8 -3,-8 5,-14 -4,-8 3,-4 -1,-3 6,-5 v -9 l -19,-19 1,-2 -6,-9 h -5 l -2,4 -7,-2 -14,3 -3,-3 -7,4 -2,-2 1,-2 -6,-4 h -9 l -11,1 -6,6 -8,-5 -10,-9 -8,8 -6,3 -12,-4 -8,-9 -11,6 -10,12 1,7 -7,3 -8,10 -1,5 -8,5 h 1 l 1,3 -8,3 1,7 -2,2 -2,-3 -7,6 -2,-2 -9,1 -3,8 -14,12 -1,1 8,1 3,4 4,-2 1,4 7,1 4,14 -5,2 -5,-3 -7,8 -10,-4 -6,-1 -1,3 -25,18 -7,-4 -3,2 -19,-1 1,-3 -7,-5 -6,3 2,6 -10,8 -1,-2 -4,-1 v -3 l -5,-3 -12,5 -6,-5 -1,2 -5,8 -6,-3 -1,-6 -8,-4 -3,1 -2,2 1,8 -6,5 -1,9 h -6 l -2,1 -4,5 -3,-1 -17,12 v 3 l 10,3 v 5 l -6,11 -9,18 1,4 4,3 -2,4 v 1 l -3,6 -11,13 -11,3 -2,7 -4,5 9,4 v 6 l 3,4 4,11 -2,8 -3,3 2,4 -1,21 5,-1 1,3 5,3 1,5 2,2 6,-2 -1,11 -1,4 2,2 4,3 -2,5 4,7 z m -107,-26 -2,-3 -9,11 h 3 l 7,1 z m 218,7 4,-5 -3,-8 -6,7 1,4 z m -31,-6 2,6 2,-3 z m 75,-4 -2,-6 -4,1 -3,3 2,-4 -4,-8 h -5 -4 v 5 h -3 l -1,5 6,10 1,5 13,10 3,-7 3,-3 h -5 v -3 l 5,-4 z m -93,1 h 1 l 3,5 1,-2 z m 121,-7 1,-8 -9,5 v 5 z m -286,-2 2,2 v -4 z m 230,1 -4,-8 -5,9 5,9 5,-6 z m 60,-2 5,-1 9,-4 2,-6 h -4 l -2,5 -3,-6 -10,7 z m -284,1 h 1 l 1,6 2,-4 z m 276,-11 1,-5 -6,-1 -1,4 5,5 z m -12,-2 3,-1 -2,-1 z m -30,-3 3,3 h 4 l -2,-6 z m 84,-3 -3,2 h 3 z m -55,-2 v -5 l -7,-2 -16,9 2,9 5,4 6,-2 2,3 v -3 l 2,-8 z m 2,-3 1,1 3,4 3,-3 z"
+         d="m 303,584 1,-5 -7,-11 -1,5 -14,-1 4,8 -2,4 z m -28,0 v -1 l -7,1 z m -12,0 -1,-3 -2,2 v 1 z m 192,0 3,-9 -4,-3 -4,4 -4,8 z m -15,0 v -2 l -2,2 z m -199,0 11,-12 -5,-11 -5,7 -11,4 -7,12 z m 193,0 1,-5 -3,-1 -2,3 3,3 z m -29,-7 4,2 3,-5 z m -144,0 1,-2 -6,1 z m 175,-3 h 3 l -2,-4 z m 12,-7 -3,5 5,2 2,-7 -3,3 z m 47,4 v 1 z m 33,-2 -2,-10 -13,4 h -4 l 1,-3 -3,2 -6,17 9,4 z m 86,-80 h -6 z m 0,-49 -5,-9 2,-11 3,-4 z m -401,144 1,-2 2,-1 7,-4 1,-4 1,3 4,-3 4,-8 9,-9 3,-10 3,4 4,-1 -5,-3 h 7 l -1,-3 h -4 l 2,-1 6,-1 v -2 l 1,7 4,-2 v -4 l 8,-1 7,2 6,3 4,2 3,-2 7,-2 -1,-4 3,6 8,-1 4,-4 v 1 l 2,1 -2,1 -3,2 2,4 -3,2 1,-2 -3,-3 -3,5 4,2 -3,8 4,7 4,6 -1,11 z m 185,0 -2,-3 -3,3 z m -5,0 1,-4 -3,-7 12,2 1,-1 3,-13 6,-2 h 7 l 4,10 3,-2 7,-2 -2,-4 6,-2 3,-4 6,-1 1,-4 3,5 9,-6 5,2 7,1 3,-3 6,4 12,-2 12,-5 4,-18 -3,-3 3,1 v -2 l 1,3 10,4 10,-5 13,-4 15,-4 4,-5 -1,-5 5,5 -2,-7 9,6 h -3 l 2,5 -5,5 2,4 6,-4 v 3 l 1,4 v -1 h 7 l 6,5 7,-1 1,5 7,-1 6,-6 1,-16 3,-2 V 409 l -1,-1 -4,-3 -5,-13 -4,-9 4,-5 -2,-4 3,-11 1,-11 -8,-10 -6,-1 -2,-8 h -1 l 1,-1 -2,-4 -8,-8 -3,-8 5,-14 -4,-8 3,-4 -1,-3 6,-5 v -9 l -19,-19 1,-2 -6,-9 h -5 l -2,4 -7,-2 -14,3 -3,-3 -7,4 -2,-2 1,-2 -6,-4 h -9 l -11,1 -6,6 -8,-5 -10,-9 -8,8 -6,3 -12,-4 -8,-9 -11,6 -10,12 1,7 -7,3 -8,10 -1,5 -8,5 h 1 l 1,3 -8,3 1,7 -2,2 -2,-3 -7,6 -2,-2 -9,1 -3,8 -14,12 -1,1 8,1 3,4 4,-2 1,4 7,1 4,14 -5,2 -5,-3 -7,8 -10,-4 -6,-1 -1,3 -25,18 -7,-4 -3,2 -19,-1 1,-3 -7,-5 -6,3 2,6 -10,8 -1,-2 -4,-1 v -3 l -5,-3 -12,5 -6,-5 -1,2 -5,8 -6,-3 -1,-6 -8,-4 -3,1 -2,2 1,8 -6,5 -1,9 h -6 l -2,1 -4,5 -3,-1 -17,12 v 3 l 10,3 v 5 l -6,11 -9,18 1,4 4,3 -2,4 v 1 l -3,6 -11,13 -11,3 -2,7 -4,5 9,4 v 6 l 3,4 4,11 -2,8 -3,3 2,4 -1,21 5,-1 1,3 5,3 1,5 2,2 6,-2 -1,11 -1,4 2,2 4,3 -2,5 4,7 z m -107,-26 -2,-3 -9,11 h 3 l 7,1 z m 218,7 4,-5 -3,-8 -6,7 1,4 z m -31,-6 2,6 2,-3 z m 75,-4 -2,-6 -4,1 -3,3 2,-4 -4,-8 h -5 -4 v 5 h -3 l -1,5 6,10 1,5 13,10 3,-7 3,-3 h -5 v -3 l 5,-4 z m -93,1 h 1 l 3,5 1,-2 z m 121,-7 1,-8 -9,5 v 5 z m -286,-2 2,2 v -4 z m 230,... [truncated]
          inkscape:connector-curvature="0" />
       <path class="map-east"
          id="35000"
@@ -438,6 +384,7 @@
          style="fill:#cccccc;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none" />
     </a>
     <a
+       href="/all-destinations?search=浜田"
        id="a3332"
        style="fill:#f6bad3;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -450,6 +397,7 @@
          style="fill:#07c5ff;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none" />
     </a>
     <a
+       href="/all-destinations?search=益田"
        id="a3340"
        style="fill:#171717;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -462,6 +410,7 @@
          style="fill:#0657f9;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none" />
     </a>
     <a
+       href="/all-destinations?search=大田"
        id="a3344"
        style="fill:#000000;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -474,6 +423,7 @@
          style="fill:#ff0d00;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none" />
     </a>
     <a
+       href="/all-destinations?search=安来"
        id="a3348"
        style="fill:#000000;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -486,6 +436,7 @@
          style="fill:#00ff08;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none" />
     </a>
     <a
+       href="/all-destinations?search=江津市"
        id="a3352"
        style="fill:#000000;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -498,6 +449,7 @@
          style="fill:#0065fd;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none" />
     </a>
     <a
+       href="/all-destinations?search=雲南"
        id="a3356"
        style="fill:#000000;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -510,6 +462,7 @@
          style="fill:#f3c307;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none" />
     </a>
     <a
+       href="/all-destinations?search=奥出雲町"
        id="a3364"
        style="fill:#e1bf14;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -522,6 +475,7 @@
          style="fill:#ff9808;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none" />
     </a>
     <a
+       href="/all-destinations?search=飯南町"
        id="a3368"
        style="fill:#e31212;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -534,6 +488,7 @@
          style="fill:#ec0a0a;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none" />
     </a>
     <a
+       href="/all-destinations?search=川本町"
        id="a3376"
        style="fill:#000000;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -546,6 +501,7 @@
          style="fill:#f30909;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none" />
     </a>
     <a
+       href="/all-destinations?search=美郷町"
        id="a3380"
        style="fill:#ece3b4;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -558,6 +514,7 @@
          style="fill:#f20c59;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none" />
     </a>
     <a
+       href="/all-destinations?search=邑南町"
        id="a3384"
        style="fill:#201b72;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -570,6 +527,7 @@
          style="fill:#00a1fe;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none" />
     </a>
     <a
+       href="/all-destinations?search=津和野"
        id="a3388"
        style="fill:#000000;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -582,6 +540,7 @@
          style="fill:#09c6ff;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none" />
     </a>
     <a
+       href="/all-destinations?search=吉賀町"
        id="a3392"
        style="fill:#00fd3f;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -600,6 +559,7 @@
          id="g7065"
          style="stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none">
         <a
+           href="/all-destinations?search=松江"
            id="a3328"
            style="fill:#000000;fill-opacity:1;stroke-width:0.309427;stroke-miterlimit:4;stroke-dasharray:none">
           <use
@@ -631,7 +591,7 @@
   </g>
   <path class="shimane-area"
      inkscape:connector-curvature="0"
-     d="m 341.92197,30.3787 h 3.23177 l 1.93907,2.585421 -0.64636,-2.585421 2.58542,2.585421 2.58543,-1.939066 v 4.524488 l 5.81719,5.817197 -0.64635,2.585422 3.23178,0.646355 11.63439,12.280751 6.46355,1.292711 v 5.817198 h -5.81719 l -0.64636,-1.939066 5.17084,1.29271 -3.23177,-4.524487 -1.93907,0.646355 -5.8172,-1.939066 -1.29271,1.939066 -1.29271,-3.878132 -7.10991,-3.231776 -1.29271,3.231776 -1.29271,-1.29271 -5.8172,4.524487 -4.52448,-3.878132 -7.75627,-1.29271 -0.64635,-3.231777 3.87813,-3.878132 -2.58542,-2.585421 v -7.109909 l 3.87813,-1.939066 1.29271,-3.878132 7.75626,5.817198 -1.93906,2.585422 -4.52449,-0.646356 v 4.524487 l -3.23178,2.585422 -2.58542,-1.939066 0.64636,-1.939066 -0.64636,1.939066 1.93907,1.939066 4.52449,-3.231777 5.17084,1.939066 v -6.463553 l 3.23178,-0.646355 -1.29271,-2.585422 -2.58543,0.646356 -5.81719,-5.170843 -1.29271,1.939066 z m 10.98804,7.109909 3.23177,5.170842 0.64636,-1.292711 z m -1.93907,-7.109909 4.52449,-3.231776 h 5.8172 z m 25.20786,89.84339 2.58542,-4.52448 0.64635,1.29271 z m -84.67255,-71.745441 9.04898,-2.585421 14.86617,4.524487 3.23177,-1.292711 v 1.939066 l -3.87813,6.463553 -20.68337,3.878132 -7.75626,4.524488 -1.93907,-1.292711 0.64636,-1.939066 -2.58542,0.646355 -4.52449,-9.695329 z m -53.64749,37.488608 1.29271,1.292711 -2.58542,2.585421 -0.64636,-2.585421 z M 94.367877,248.8468 v 3.87813 l -1.939066,-1.29271 z m 151.893503,-95.66059 3.87813,1.29271 -4.52449,0.64636 3.23178,3.23178 -1.93907,1.29271 v -2.58542 h -2.58542 z m 150.60079,69.80638 -4.52449,-1.29271 0.64636,-1.93907 -1.93907,-0.64635 -5.8172,1.29271 0.64636,2.58542 -1.93907,-0.64636 -1.29271,1.93907 0.64636,-1.93907 6.46355,-3.23177 0.64635,-3.87814 v 1.93907 l 1.93907,-1.29271 -1.93907,1.93907 3.23178,1.29271 -0.64635,1.93906 z m -58.81834,65.92824 2.58543,-1.93907 -3.87814,-4.52448 v -4.52449 l 2.58542,7.75626 1.93907,-1.29271 -0.64635,3.23178 z m 20.03702,-70.45273 h -1.93907 l 1.93907,-0.64635 -0.64636,-2.58543 2.58543,7.10991 z m -95.01423,-41.36674 2.58542,-5.8172 -1.29271,2.58542 1.93906,2.58542 -1.93906,1.93907 -2.58542,-0.64635 z M 117.63667,377.47151 v -1.29271 z m -3.87813,-18.09795 -1.29271,3.87813 0.64635,-5.8172 z m 107.94134,-88.55068 0.64635,-1.29271 -3.23177,-1.29271 1.29271,-3.23178 v 3.87814 h 3.23177 l -1.93906,3.23177 1.93906,0.64636 h -1.93906 z m -67.86731,-14.21982 h -2.58542 l 0.64635,-1.29271 3.23178,1.93907 1.93907,-3.87813 0.64635,1.29271 3.23178,-1.93907 -4.52449,2.58542 -0.64636,1.93907 h 1.29272 z m -30.3787,7.75627 1.29271,3.87813 -1.93907,2.58542 -1.93906,-0.64635 z M 12.280751,366.48347 7.7562638,371.00796 7.1099085,369.71524 Z"
+     d="m 341.92197,30.3787 h 3.23177 l 1.93907,2.585421 -0.64636,-2.585421 2.58542,2.585421 2.58543,-1.939066 v 4.524488 l 5.81719,5.817197 -0.64635,2.585422 3.23178,0.646355 11.63439,12.280751 6.46355,1.292711 v 5.817198 h -5.81719 l -0.64636,-1.939066 5.17084,1.29271 -3.23177,-4.524487 -1.93907,0.646355 -5.8172,-1.939066 -1.29271,1.939066 -1.29271,-3.878132 -7.10991,-3.231776 -1.29271,3.231776 -1.29271,-1.29271 -5.8172,4.524487 -4.52448,-3.878132 -7.75627,-1.29271 -0.64635,-3.231777 3.87813,-3.878132 -2.58542,-2.585421 v -7.109909 l 3.87813,-1.939066 1.29271,-3.878132 7.75626,5.817198 -1.93906,2.585422 -4.52449,-0.646356 v 4.524487 l -3.23178,2.585422 -2.58542,-1.939066 0.64636,-1.939066 -0.64636,1.939066 1.93907,1.939066 4.52449,-3.231777 5.17084,1.939066 v -6.463553 l 3.23178,-0.646355 -1.29271,-2.585421 -2.58543,0.646356 -5.81719,-5.170843 -1.29271,1.939066 z m 10.98804,7.109909 3.23177,5.170842 0.64636,-1.292711 z m -1.93907,-7.109909 4.52449,-3.231776 h 5.8172 z m 25.20786,89.84339 2.58542,-4.52448 0.64635,1.29271 z m -84.67255,-71.745441 9.04898,-2.585421 14.86617,4.524487 3.23177,-1.292711 v 1.939066 l -3.87813,6.463553 -20.68337,3.878132 -7.75626,4.524488 -1.93907,-1.292711 0.64636,-1.939066 -2.58542,0.646355 -4.52449,-9.695329 z m -53.64749,37.488608 1.29271,1.292711 -2.58542,2.585421 -0.64636,-2.585421 z M 94.367877,248.8468 v 3.87813 l -1.939066,-1.29271 z m 151.893503,-95.66059 3.87813,1.29271 -4.52449,0.64636 3.23178,3.23178 -1.93907,1.29271 v -2.58542 h -2.58542 z m 150.60079,69.80638 -4.52449,-1.29271 0.64636,-1.93907 -1.93907,-0.64635 -5.8172,1.29271 0.64636,2.58542 -1.93907,-0.64636 -1.29271,1.93907 0.64636,-1.93907 6.46355,-3.23177 0.64635,-3.87814 v 1.93907 l 1.93907,-1.29271 -1.93907,1.93907 3.23178,1.29271 -0.64635,1.93906 z m -58.81834,65.92824 2.58543,-1.93907 -3.87814,-4.52448 v -4.52449 l 2.58542,7.75626 1.93907,-1.29271 -0.64635,3.23178 z m 20.03702,-70.45273 h -1.93907 l 1.93907,-0.64635 -0.64636,-2.58543 2.58543,7.10991 z m -95.01423,-41.... [truncated]
      id="path3396"
      style="fill:#eeeeee;fill-opacity:1;stroke:#000000;stroke-width:0.129271;stroke-linejoin:round" />
   <rect
@@ -653,6 +613,7 @@
      id="g3410"
      transform="scale(0.64635532)">
     <a
+       href="/all-destinations?search=隠岐"
        id="a3412"
        style="fill:#ece3b4;fill-opacity:1;stroke-width:0.30942733;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -665,6 +626,7 @@
          style="fill:#ece3b4;fill-opacity:1;stroke-width:0.30942733;stroke-miterlimit:4;stroke-dasharray:none" />
     </a>
     <a
+       href="/all-destinations?search=隠岐"
        id="a3416"
        style="fill:#ece3b4;fill-opacity:1;stroke-width:0.30942733;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -677,6 +639,7 @@
          style="fill:#ece3b4;fill-opacity:1;stroke-width:0.30942733;stroke-miterlimit:4;stroke-dasharray:none" />
     </a>
     <a
+       href="/all-destinations?search=隠岐"
        id="a3420"
        style="fill:#b6f2dc;fill-opacity:1;stroke-width:0.30942733;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -689,6 +652,7 @@
          style="fill:#b6f2dc;fill-opacity:1;stroke-width:0.30942733;stroke-miterlimit:4;stroke-dasharray:none" />
     </a>
     <a
+       href="/all-destinations?search=隠岐"
        id="a3424"
        style="fill:#ece3b4;fill-opacity:1;stroke-width:0.30942733;stroke-miterlimit:4;stroke-dasharray:none">
       <use
@@ -730,6 +694,7 @@
        style="line-height:0%">50km</text>
   </g>
   <a
+     href="/all-destinations?search=出雲"
      style="stroke-width:0.30942733;stroke-miterlimit:4;stroke-dasharray:none"
      transform="matrix(0.64635532,0,0,0.64635532,0,0.55512351)"
      id="a3342">
@@ -787,7 +752,7 @@
   </a>
   <path class="shimane-area"
      inkscape:connector-curvature="0"
-     d="m 341.8813,30.394072 h 3.23177 l 1.93907,2.585422 -0.64636,-2.585422 2.58543,2.585422 2.58542,-1.939066 v 4.524487 l 5.8172,5.817198 -0.64636,2.585421 3.23178,0.646355 11.63439,12.280752 6.46356,1.292711 v 5.817197 H 372.26 l -0.64636,-1.939065 5.17084,1.29271 -3.23177,-4.524487 -1.93907,0.646355 -5.8172,-1.939066 -1.29271,1.939066 -1.29271,-3.878132 -7.10991,-3.231777 -1.29271,3.231777 -1.29271,-1.292711 -5.81719,4.524488 -4.52449,-3.878133 -7.75627,-1.29271 -0.64635,-3.231777 3.87813,-3.878132 -2.58542,-2.585421 v -7.109908 l 3.87813,-1.939066 1.29271,-3.878132 7.75627,5.817198 -1.93907,2.585421 -4.52449,-0.646356 v 4.524488 l -3.23177,2.585421 -2.58543,-1.939066 0.64636,-1.939066 -0.64636,1.939066 1.93907,1.939066 4.52449,-3.231777 5.17084,1.939066 v -6.463553 l 3.23178,-0.646355 -1.29271,-2.585421 -2.58542,0.646355 -5.8172,-5.170843 -1.29271,1.939066 z m 10.98804,7.109909 3.23177,5.170842 0.64636,-1.29271 z m -1.93907,-7.109909 4.52449,-3.231776 h 5.8172 z m 25.20786,89.843388 2.58542,-4.52449 0.64636,1.29272 z m -84.67255,-71.745439 9.04898,-2.585421 14.86617,4.524487 3.23178,-1.29271 v 1.939066 l -3.87814,6.463553 -20.68337,3.878132 -7.75626,4.524486 -1.93907,-1.29271 0.64636,-1.939065 -2.58542,0.646355 -4.52449,-9.69533 z m -53.64749,37.488608 1.29271,1.292711 -2.58542,2.585421 -0.64635,-2.585421 z M 94.327208,248.86217 v 3.87813 l -1.939066,-1.29271 z m 151.893502,-95.66059 3.87813,1.29271 -4.52448,0.64636 3.23177,3.23178 -1.93906,1.29271 v -2.58543 h -2.58543 z m 150.60079,69.80638 -4.52449,-1.29271 0.64636,-1.93907 -1.93907,-0.64635 -5.8172,1.29271 0.64636,2.58542 -1.93907,-0.64636 -1.29271,1.93907 0.64636,-1.93907 6.46355,-3.23177 0.64636,-3.87814 v 1.93907 l 1.93906,-1.29271 -1.93906,1.93906 3.23177,1.29272 -0.64635,1.93906 z m -58.81833,65.92824 2.58542,-1.93907 -3.87814,-4.52448 v -4.52449 l 2.58543,7.75626 1.93906,-1.29271 -0.64635,3.23178 z m 20.03701,-70.45273 h -1.93907 l 1.93907,-0.64636 -0.64635,-2.58542 2.58542,7.10991 z m -95.01423,-41.36674 2.58542,-5.8172 -1.29271,2.58542 1.93907,2.58542 -1.93907,1.93907 -2.58542,-0.64635 z M 117.596,377.48688 v -1.29271 z m -3.87813,-18.09795 -1.29271,3.87813 0.64636,-5.8172 z m 107.94134,-88.55068 0.64635,-1.29271 -3.23177,-1.29271 1.29271,-3.23178 v 3.87813 h 3.23177 l -1.93906,3.23178 1.93906,0.64636 h -1.93906 z M 153.7919,256.61843 h -2.58542 l 0.64635,-1.29271 3.23178,1.93907 1.93907,-3.87813 0.64635,1.29271 3.23178,-1.93907 -4.52449,2.58542 -0.64635,1.93907 h 1.29271 z m -30.3787,7.75627 1.29271,3.87813 -1.93907,2.58542 -1.93906,-0.64635 z M 12.240083,366.49884 7.7155977,371.02333 7.0692424,369.73061 Z"
+     d="m 341.8813,30.394072 h 3.23177 l 1.93907,2.585422 -0.64636,-2.585422 2.58543,2.585422 2.58542,-1.939066 v 4.524487 l 5.8172,5.817198 -0.64636,2.585421 3.23178,0.646355 11.63439,12.280752 6.46356,1.292711 v 5.817197 H 372.26 l -0.64636,-1.939065 5.17084,1.29271 -3.23177,-4.524487 -1.93906,0.646355 -5.8172,-1.939066 -1.29271,1.939066 -1.29271,-3.878132 -7.10991,-3.231777 -1.29271,3.231777 -1.29271,-1.292711 -5.81719,4.524488 -4.52449,-3.878133 -7.75627,-1.29271 -0.64635,-3.231777 3.87813,-3.878132 -2.58542,-2.585421 v -7.109908 l 3.87813,-1.939066 1.29271,-3.878132 7.75627,5.817198 -1.93907,2.585421 -4.52449,-0.646356 v 4.524488 l -3.23177,2.585421 -2.58543,-1.939066 0.64636,-1.939066 -0.64636,1.939066 1.93907,1.939066 4.52449,-3.231777 5.17084,1.939066 v -6.463553 l 3.23178,-0.646355 -1.29271,-2.585421 -2.58542,0.646355 -5.8172,-5.170843 -1.29271,1.939066 z m 10.98804,7.109909 3.23177,5.170842 0.64636,-1.29271 z m -1.93907,-7.109909 4.52449,-3.231776 h 5.8172 z m 25.20786,89.843388 2.58542,-4.52449 0.64636,1.29272 z m -84.67255,-71.745439 9.04898,-2.585421 14.86617,4.524487 3.23178,-1.29271 v 1.939066 l -3.87814,6.463553 -20.68337,3.878132 -7.75626,4.524486 -1.93907,-1.29271 0.64636,-1.939065 -2.58542,0.646355 -4.52449,-9.69533 z m -53.64749,37.488608 1.29271,1.292711 -2.58542,2.585421 -0.64635,-2.585421 z M 94.327208,248.86217 v 3.87813 l -1.939066,-1.29271 z m 151.893502,-95.66059 3.87813,1.29271 -4.52448,0.64636 3.23177,3.23178 -1.93906,1.29271 v -2.58543 h -2.58543 z m 150.60079,69.80638 -4.52449,-1.29271 0.64636,-1.93907 -1.93907,-0.64635 -5.8172,1.29271 0.64636,2.58542 -1.93907,-0.64636 -1.29271,1.93907 0.64636,-1.93907 6.46355,-3.23177 0.64636,-3.87814 v 1.93907 l 1.93906,-1.29271 -1.93906,1.93906 3.23177,1.29272 -0.64635,1.93906 z m -58.81833,65.92824 2.58542,-1.93907 -3.87814,-4.52448 v -4.52449 l 2.58543,7.75626 1.93906,-1.29271 -0.64635,3.23178 z m 20.03701,-70.45273 h -1.93907 l 1.93907,-0.64636 -0.64635,-2.58542 2.58542,7.10991 z m -95.01423,-41.... [truncated]
      id="path3396-1"
      style="fill:#eeeeee;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
 </svg>
@@ -795,175 +760,19 @@
     </div>
 </section>
 
-    <section class="home-section" id="contact-section">
-        <div class="home-section-content">
-            <h2 class="home-section-title">お問い合わせ</h2>
-            <p>
-                島根県への旅行に関するご質問やご相談がございましたら、お気軽にお問い合わせください。専門のスタッフが、あなたの旅の計画をサポートいたします。
-            </p>
-            <a href="/contact" class="section-link">お問い合わせフォームへ &rarr;</a>
-        </div>
-        <div class="home-section-image">
-            <img src="https://marketplace.canva.com/EAF523i9Fuk/1/0/1600w/canva-%E3%83%94%E3%83%B3%E3%82%AF%E3%80%80%E3%83%96%E3%83%A9%E3%82%A6%E3%83%B3%E3%80%80%E3%81%8B%E3%82%8F%E3%81%84%E3%81%84%E3%80%80%E5%A5%B3%E3%81%AE%E5%AD%90%E3%80%80%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B%E3%80%80%E8%8A%B1%E3%80%80%E3%83%95%E3%82%A7%E3%83%9F%E3%83%8B%E3%83%B3%E3%80%80instagram%E3%81%AE%E6%8A%95%E7%A8%BF%E3%80%80%E6%AD%A3%E6%96%B9%E5%BD%A2-CQUx167-Tf8.jpg" alt="お問い合わせ">
-        </div>
-    </section>
+<section class="home-section" id="contact-section">
+    <div class="home-section-content">
+        <h2 class="home-section-title">お問い合わせ</h2>
+        <p>
+            島根県への旅行に関するご質問やご相談がございましたら、お気軽にお問い合わせください。専門のスタッフが、あなたの旅の計画をサポートいたします。
+        </p>
+        <a href="/contact" class="section-link">お問い合わせフォームへ &rarr;</a>
+    </div>
+    <div class="home-section-image">
+        <img src="https://marketplace.canva.com/EAF523i9Fuk/1/0/1600w/canva-%E3%83%94%E3%83%B3%E3%82%AF%E3%80%80%E3%83%96%E3%83%A9%E3%82%A6%E3%83%B3%E3%80%80%E3%81%8B%E3%82%8F%E3%81%84%E3%81%84%E3%80%80%E5%A5%B3%E3%81%AE%E5%AD%90%E3%80%80%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B%E3%80%80%E8%8A%B1%E3%80%80%E3%83%95%E3%82%A7%E3%83%9F%E3%83%8B%E3%83%B3%E3%80%80instagram%E3%81%AE%E6%8A%95%E7%A8%BF%E3%80%80%E6%AD%A3%E6%96%B9%E5%BD%A2-CQUx167-Tf8.jpg" alt="お問い合わせ">
+    </div>
+</section>
 
-    <footer class="site-footer">
-        <div class="footer-logo">Shimane Travel</div>
-        <div class="footer-social-icons">
-            
-            <a href="#" class="social-icon" aria-label="Facebook">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path class="shimane-area" d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
-            </a>
-
-            <a href="#" class="social-icon" aria-label="X">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path class="shimane-area" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            </a>
-
-            <a href="#" class="social-icon" aria-label="Instagram">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path class="shimane-area" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
-
-            <a href="#" class="social-icon" aria-label="LinkedIn">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path class="shimane-area" d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h5v-8.306c0-4.613 9.289-5.124 9.289 5.009v3.297h4.98v-9.03c0-6.975-9.03-5.792-10.061-2.673v-3.297h-4.24z"/></svg>
-            </a>
-
-            <a href="#" class="social-icon" aria-label="YouTube">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path class="shimane-area" d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
-            </a>
-
-        </div>
-        
-        <div class="footer-copyright">
-            © 2025 Shimane Travel Project by Hùng
-        </div>
-    </footer>
-
-    <a href="#" id="backToTop" class="back-to-top">↑</a>
-      <script> 
-    document.addEventListener('DOMContentLoaded', function() {
-        
-        const regionLinks = {
-            "#f20467": "/all-destinations?search=松江", 
-            "#ece3b4": "/all-destinations?search=石見", 
-            "#b6f2dc": "/all-destinations?search=隠岐",  
-            "#ff0d00": "/all-destinations?search=大田",  
-            "#00ff08": "/all-destinations?search=安来",
-            "#ec0a0a": "/all-destinations?search=飯南町",
-            "#00a1fe": "/all-destinations?search=邑南町",
-            "#f20c59": "/all-destinations?search=美郷町",
-            "#f30909": "/all-destinations?search=川本町",
-            "#efa300": "/all-destinations?search=出雲市",
-            "#07c5ff": "/all-destinations?search=浜田市",
-            "#0065fd": "/all-destinations?search=江津市",
-            "#0657f9": "/all-destinations?search=益田市",
-            "#09c6ff": "/all-destinations?search=津和野町",
-            "#4208f2": "/all-destinations?search=吉賀町",
-            "#ff9808": "/all-destinations?search=奥出雲町"
-        };
-
-        const regionNames = {
-            "#f20467": "松江エリア (Vùng Matsue)",
-            "#ece3b4": "石見エリア (Vùng Iwami)",
-            "#00ff08": "安来エリア (Vùng Yasugi)",
-            "#ff9808": "奥出雲エリア (Vùng奥出雲)",
-            "#ec0a0a": "飯南エリア (Vùng Iinan)",
-            "#f30909": "川本エリア (Vùng Kawamoto)",
-            "#00a1fe": "邑南エリア (Vùng Ōnan)",
-            "#f20c59": "美郷エリア (Vùng Misato)",
-            "#b6f2dc": "隠岐エリア (Vùng đảo Oki)",
-            "#efa300": "出雲エリア (Vùng Izumo)",
-            "#ff0d00": "大田エリア (Vùng Oda)",
-            "#0065fd": "江津エリア (Vùng Gotsu)",
-            "#07c5ff": "浜田エリア (Vùng Hamada)",
-            "#0657f9": "益田エリア (Vùng Masuda)",
-            "#09c6ff": "津和野エリア (Vùng Tsuwano)",
-            "#4208f2": "吉賀町エリア (Vùng 吉賀町)"
-
-        };
-
-        
-        const areaTitle = document.getElementById('current-area-title');
-        const areaDesc = document.getElementById('current-area-desc');
-
-     
-        const mapElements = document.querySelectorAll('.map-svg-container use, .map-svg-container path');
-
-        mapElements.forEach(el => {
-          
-            const style = el.getAttribute('style');
-            
-            if (style) {
-               
-                for (const [color, link] of Object.entries(regionLinks)) {
-                    if (style.includes(color)) {
-                        
-                        
-                        el.style.cursor = "pointer";
-                        el.style.transition = "opacity 0.3s";
-
-                       
-                        el.onclick = function() {
-                            window.location.href = link;
-                        };
-
-                      
-                        el.onmouseover = function() {
-                            this.style.opacity = "0.7"; 
-                            areaTitle.innerText = regionNames[color];
-                            areaDesc.innerText = "クリックして、このエリアの観光地を表示します。";
-                        };
-
-                        el.onmouseout = function() {
-                            this.style.opacity = "1";
-                            areaTitle.innerText = "選択してください";
-                            areaDesc.innerText = "地図上のエリアをクリックして、詳細情報を確認してください。";
-                        };
-                    }
-                }
-            }
-        });
-    });
-    
-
-</script>
-<script>
-        window.addEventListener('load', function() {
-            // Tìm đến phần tử Loader bằng ID
-            const loader = document.getElementById('page-loader');
-            
-            if (loader) {
-                // Tạo hiệu ứng mờ dần (Fade out)
-                loader.style.opacity = '0';
-                
-                // Sau khi mờ hẳn (khoảng 0.5s), mới ẩn hoàn toàn khỏi layout
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                }, 500); 
-            }
-        });
-    </script>
-<script src="/js/mobile-menu.js"></script>
-<script src="js/transition.js"></script>
-<script>
-    // 1. Hiệu ứng Header khi cuộn trang
-    window.addEventListener('scroll', function() {
-        const header = document.querySelector('.main-header');
-        if (window.scrollY > 80) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
-    });
-
-    // 2. Ẩn Shimanekko Loader
-    window.addEventListener('load', function() {
-        const loader = document.getElementById('page-loader');
-        setTimeout(() => {
-            loader.style.opacity = '0';
-            setTimeout(() => loader.style.display = 'none', 500);
-        }, 800); // Cho mèo nhảy lâu hơn chút như bạn muốn
-    });
-</script>
-</body>
-</html>
+<script src="/js/map-interaction.js"></script>
+<%- include('partials/footer') %>
+<%- include('partials/scripts') %>

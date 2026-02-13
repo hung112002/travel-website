@@ -1,60 +1,8 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <% if (travel) { %>
-        <title><%= travel.name %> | Shimane Travel</title>
-    <% } else { %>
-        <title>見つかりません</title>
-    <% } %>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-
-<body class="admin-body">
-    <div id="page-loader" class="page-loader">
-        <div class="loader-spinner"></div>
-    </div>
-
-    <header class="main-header">
-        <div class="nav-container">
-            <div class="logo">
-                <a href="/">
-                    <svg width="35" height="35" viewBox="0 0 100 100" fill="none" class="logo-icon">
-                        <circle cx="35.5" cy="35.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
-                        <circle cx="64.5" cy="35.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
-                        <circle cx="35.5" cy="64.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
-                        <circle cx="64.5" cy="64.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
-                    </svg>
-                    <span class="logo-text">Shimane<span>Travel</span></span>
-                </a>
-            </div>
-            <button class="hamburger-menu" id="hamburger-menu" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <nav class="nav-links" id="nav-links">
-                <a href="/" class="nav-item">ホーム</a>
-                <a href="/cuisine" class="nav-item">グルメ</a>
-                <a href="/people" class="nav-item">匠・人物</a>
-                <a href="/all-destinations" class="nav-item">全ての観光地</a>
-
-                <% if (user) { %>
-                    <div class="user-actions">
-                        <a href="/profile" class="btn-member">
-                            👤 <%= user.username %>
-                        </a>
-                        <a href="/logout" class="btn-logout">ログアウト</a>
-                    </div>
-                <% } else { %>
-                    <a href="/login" class="btn-member">ログイン</a>
-                <% } %>
-            </nav>
-        </div>
-    </header>
+<% if (travel) { %>
+    <%- include('partials/header', { title: travel.name + ' | Shimane Travel' }) %>
+<% } else { %>
+    <%- include('partials/header', { title: '見つかりません' }) %>
+<% } %>
 
     <main class="detail-container" style="max-width: 1000px; margin: 120px auto 50px auto; padding: 0 20px;">
     <% if (travel) { %>
@@ -172,7 +120,7 @@
                     <circle cx="35.5" cy="64.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
                     <circle cx="64.5" cy="64.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
                 </svg>
-                おすすめコース 
+                おすすめ体験
             </h2>
             
             <div class="carousel-container" style="position: relative;">
@@ -200,38 +148,38 @@
                         </div>
                     </a>
                     <a href="/all-destinations" class="recommend-card" style="min-width: 250px; background: #fff; text-decoration: none; color: inherit; border-radius: 4px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
-                        <img src="https://www.kankou-shimane.com/jp/wp-content/uploads/2020/03/363-tamazukurionsen-006-e1584853822575.jpg" style="width: 100%; height: 150px; object-fit: cover;">
+                        <img src="https://www.kankou-shimane.com/wp-content/themes/navi_jp_2020/images/feature/72158/matsue_ohashi_021.jpg" style="width: 100%; height: 150px; object-fit: cover;">
                         <div class="recommend-content" style="padding: 15px;">
-                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">温泉</span>
-                            <h3 style="font-size: 1rem; margin: 10px 0;">美肌の湯・温泉巡り</h3>
+                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">小泉八雲記念館</span>
+                            <h3 style="font-size: 1rem; margin: 10px 0;">小泉八雲</h3>
                         </div>
                     </a>
                     <a href="/all-destinations" class="recommend-card" style="min-width: 250px; background: #fff; text-decoration: none; color: inherit; border-radius: 4px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
-                        <img src="https://www.kankou-shimane.com/jp/wp-content/uploads/2020/03/363-tamazukurionsen-006-e1584853822575.jpg" style="width: 100%; height: 150px; object-fit: cover;">
+                        <img src="https://www.town.okinoshima.shimane.jp/www/contents/1432530612483/simple/240315141337_3.jpeg" style="width: 100%; height: 150px; object-fit: cover;">
                         <div class="recommend-content" style="padding: 15px;">
-                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">温泉</span>
-                            <h3 style="font-size: 1rem; margin: 10px 0;">美肌の湯・温泉巡り</h3>
+                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">ローソク島遊覧船</span>
+                            <h3 style="font-size: 1rem; margin: 10px 0;">景色を楽しむ</h3>
                         </div>
                     </a>
                     <a href="/all-destinations" class="recommend-card" style="min-width: 250px; background: #fff; text-decoration: none; color: inherit; border-radius: 4px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
-                        <img src="https://www.kankou-shimane.com/jp/wp-content/uploads/2020/03/363-tamazukurionsen-006-e1584853822575.jpg" style="width: 100%; height: 150px; object-fit: cover;">
+                        <img src="https://www.kankou-shimane.com/jp/wp-content/uploads/2022/04/nishinoshimatyoukankoukoyukai-si-kayakkuwakuwakutaiken02.jpg" style="width: 100%; height: 150px; object-fit: cover;">
                         <div class="recommend-content" style="padding: 15px;">
-                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">温泉</span>
-                            <h3 style="font-size: 1rem; margin: 10px 0;">美肌の湯・温泉巡り</h3>
+                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">洞窟探検</span>
+                            <h3 style="font-size: 1rem; margin: 10px 0;">ウォータースポーツ</h3>
                         </div>
                     </a>
                     <a href="/all-destinations" class="recommend-card" style="min-width: 250px; background: #fff; text-decoration: none; color: inherit; border-radius: 4px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
-                        <img src="https://www.kankou-shimane.com/jp/wp-content/uploads/2020/03/363-tamazukurionsen-006-e1584853822575.jpg" style="width: 100%; height: 150px; object-fit: cover;">
+                        <img src="https://www.kankou-shimane.com/jp/wp-content/uploads/2023/09/40_72_1.jpg" style="width: 100%; height: 150px; object-fit: cover;">
                         <div class="recommend-content" style="padding: 15px;">
-                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">温泉</span>
-                            <h3 style="font-size: 1rem; margin: 10px 0;">美肌の湯・温泉巡り</h3>
+                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">心和ますロマンチックな島の夕陽に酔いしれる！</span>
+                            <h3 style="font-size: 1rem; margin: 10px 0;">夕日</h3>
                         </div>
                     </a>
                     <a href="/all-destinations" class="recommend-card" style="min-width: 250px; background: #fff; text-decoration: none; color: inherit; border-radius: 4px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
-                        <img src="https://www.kankou-shimane.com/jp/wp-content/uploads/2020/03/363-tamazukurionsen-006-e1584853822575.jpg" style="width: 100%; height: 150px; object-fit: cover;">
+                        <img src="https://d3dtl2c4fx01rm.cloudfront.net/photos/members/canshiron/99a6508e5d836ab81c925911dfd9aab5_3.jpg" style="width: 100%; height: 150px; object-fit: cover;">
                         <div class="recommend-content" style="padding: 15px;">
-                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">温泉</span>
-                            <h3 style="font-size: 1rem; margin: 10px 0;">美肌の湯・温泉巡り</h3>
+                            <span style="background: #c5a059; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 2px;">一日で最も清らかな時を感じることができる早朝に</span>
+                            <h3 style="font-size: 1rem; margin: 10px 0;">早朝</h3>
                         </div>
                     </a>
                 </div>
@@ -240,17 +188,7 @@
         </div>
     </section>
 
-    <footer class="site-footer" style="background: #333; color: #fff; padding: 60px 0; text-align: center;">
-        <div class="footer-links" style="margin-bottom: 30px; display: flex; justify-content: center; gap: 20px;">
-            <a href="/" style="color: #ccc; text-decoration: none;">観光ガイド</a>
-            <a href="/" style="color: #ccc; text-decoration: none;">お問い合わせ</a>
-            <a href="/" style="color: #ccc; text-decoration: none;">運営情報</a>
-        </div>
-        <div class="footer-logo" style="font-family: 'Noto Serif JP', serif; font-size: 1.5rem; color: #c5a059; margin-bottom: 10px;">
-            Shimane Travel
-        </div>
-        <p style="font-size: 0.8rem; color: #888;">© 2025-2026 Shimane Project by Hùng (Shimane IT Design College)</p>
-    </footer>
+    <%- include('partials/footer') %>
 
     <script>
  const isLoggedIn = <%= user ? 'true' : 'false' %>;
@@ -301,20 +239,4 @@
   });
 </script>
 
-<script>
-  // Header scroll effect
-  window.addEventListener('scroll', function() {
-    const header = document.querySelector('.main-header');
-    if (window.scrollY > 80) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  });
-</script>
-
-<script src="/js/mobile-menu.js"></script>
-<script src="/js/transition.js"></script>
-</html>
-</body>
-</html>
+<%- include('partials/scripts') %>

@@ -1,36 +1,4 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Shimane Travel</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Zen+Kurenaido&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-<body class="jp-page contact-page">
-    <header class="main-header" style="position: static;">
-        <div class="nav-container">
-            <div class="logo">
-                <a href="/">
-                    <svg width="35" height="35" viewBox="0 0 100 100" fill="none" class="logo-icon">
-                        <circle cx="35.5" cy="35.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
-                        <circle cx="64.5" cy="35.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
-                        <circle cx="35.5" cy="64.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
-                        <circle cx="64.5" cy="64.5" r="17.5" stroke="#c5a059" stroke-width="8"/>
-                    </svg>
-                    <span class="logo-text">Shimane<span>Travel</span></span>
-                </a>
-            </div>
-            <nav class="main-nav">
-                <a href="/" class="nav-link-hover">ホーム</a>
-                <a href="/all-destinations" class="nav-link-hover">全ての観光地</a>
-                <a href="/cuisine" class="nav-link-hover">グルメ</a>
-                <a href="/people" class="nav-link-hover">人脈</a>
-                <a href="/shimane-history" class="nav-link-hover">島根の歴史</a>
-                <a href="/contact" class="nav-link-hover">お問い合わせ</a>
-            </nav>
-        </div>
-    </header>
+<%- include('partials/header', { title: 'お問い合わせ' }) %>
 
     <main class="jp-main">
         <section class="jp-hero">
@@ -81,6 +49,10 @@
                 <% if (typeof sent !== 'undefined' && sent) { %>
                     <div class="jp-success">お問い合わせが送信されました。ありがとうございました。</div>
                 <% } %>
+                
+                <% if (typeof error !== 'undefined' && error) { %>
+                    <div class="jp-error"><%= error %></div>
+                <% } %>
 
                 <form class="jp-form" action="/contact" method="POST">
                     <div class="jp-form-grid">
@@ -117,9 +89,5 @@
         </section>
     </main>
 
-    <footer class="site-footer">
-        <div class="footer-logo">Shimane Travel</div>
-        <p class="footer-bottom">© 2025-2026 Shimane Travel Project</p>
-    </footer>
-</body>
-</html>
+<%- include('partials/footer') %>
+<%- include('partials/scripts') %>

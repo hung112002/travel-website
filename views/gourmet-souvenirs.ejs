@@ -1,0 +1,128 @@
+<%- include('partials/header', { title: 'グルメ・お土産' }) %>
+
+<style>
+    /* Add some specific styles for this page */
+    .hero-gourmet {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/cuisine-hero.jpg');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        text-align: center;
+        padding: 100px 20px;
+    }
+    .page-header h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+    }
+    .page-header p {
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .content-section {
+        padding: 60px 20px;
+    }
+    .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 40px;
+        color: #333;
+    }
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .feature-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .feature-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+    .feature-content {
+        padding: 20px;
+    }
+    .feature-content h3 {
+        margin-top: 0;
+        color: #c5a059;
+    }
+</style>
+
+<div class="hero-gourmet">
+    <div class="page-header">
+        <h1>グルメ・お土産</h1>
+        <p>島根の味覚と逸品を発見</p>
+    </div>
+</div>
+
+<main class="detail-container">
+    <!-- Gourmet Section -->
+    <section class="content-section">
+        <h2 class="section-title">特産グルメ</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <img src="https://soba-tanakaya.jp/images/slide/warigo.jpg" alt="Izumo Soba">
+                <div class="feature-content">
+                    <h3>出雲そば</h3>
+                    <p>日本三大そばの一つ。豊かな風味と「割子」の器で食べる独特のスタイルが特徴です。</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <img src="https://miso.or.jp/misoonline/wp-content/uploads/2022/07/shimane_01.jpg" alt="Shijimi Jiru">
+                <div class="feature-content">
+                    <h3>しじみ汁</h3>
+                    <p>宍道湖名産のしじみをふんだんに使った栄養満点の汁物。二日酔いにも効くと評判です。</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <img src="https://research.image.itmedia.co.jp/wp-content/uploads/2024/05/1717149080_1699505614_pixta_108497732_M-min.jpg" alt="Nodoguro">
+                <div class="feature-content">
+                    <h3>のどぐろ</h3>
+                    <p>「白身のトロ」とも呼ばれる高級魚。塩焼きや煮付けで、とろけるような脂の旨味を堪能できます。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Souvenirs Section -->
+    <section class="content-section" style="background-color: #f9f9f9;">
+        <h2 class="section-title">人気のお土産</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <img src="https://www.ichibata.co.jp/unshu-do/wp-content/uploads/2021/04/wakakusa_01.jpg" alt="Wakakusa Sweets">
+                <div class="feature-content">
+                    <h3>若草</h3>
+                    <p>松江を代表する銘菓。求肥に萌黄色そぼろをまぶした、上品な甘さの和菓子です。</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <img src="https://www.nakaurashop.jp/c/dojou/gd3/dojoumanjuu12-1.jpg" alt="Dojou Manju">
+                <div class="feature-content">
+                    <h3>どじょう掬い饅頭</h3>
+                    <p>安来節に合わせて踊る「どじょう掬い」のひょっとこ面を模した、ひょうきんで可愛らしいお饅頭。</p>
+                </div>
+            </div>
+             <div class="feature-card">
+                <img src="https://prtimes.jp/i/76904/1/resize/d76904-1-c34d81b2de032cfc0e0d-5.jpg" alt="Sake">
+                <div class="feature-content">
+                    <h3>島根の地酒</h3>
+                    <p>酒造りの歴史が古い島根には、数々の銘酒があります。お酒好きな方へのお土産に最適です。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('partials/footer') %>

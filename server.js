@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const path = require("path");
 const express = require("express");
 const session = require("express-session");
@@ -5,6 +7,7 @@ const sqlite3 = require("sqlite3").verbose();
 const crypto = require("crypto");
 const bcrypt = require('bcrypt');
 const multer = require('multer');
+const nodemailer = require('nodemailer');
 const saltRounds = 10;
 const app = express();
 const port = process.env.PORT || 3000;
@@ -24,7 +27,6 @@ const db = new sqlite3.Database("./travel.db", (err) => {
   console.log("✅ Connected to travel.db");
 
   db.serialize(() => {
-    // SỬA LỖI TẠI ĐÂY: Thêm dấu phẩy sau cột avatar
     db.run(`
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -86,6 +88,17 @@ const db = new sqlite3.Database("./travel.db", (err) => {
         };
         seedInitialUsers();
     });
+});
+
+// Configure Nodemailer transporter
+const transporter = nodemailer.createTransport({
+    service: 'gmail', // You can use other services like 'Outlook365', 'SendGrid', etc.
+                     // Or direct SMTP configuration: { host: 'smtp.example.com', port: 587, secure: false, auth: { user, pass } }
+    auth: {
+        user: process.env.EMAIL_USER || 'your_email@gmail.com', // ⚠️ REPLACE with your actual email address
+        pass: process.env.EMAIL_PASS || 'your_email_password'  // ⚠️ REPLACE with your actual email password or app-specific password
+                                                            // For Gmail, you might need an App Password: https://support.google.com/accounts/answer/185833
+    }
 });
 
 // ===============================================================
@@ -171,7 +184,7 @@ app.get('/admin', checkAdmin, (req, res) => {
 
         // 3. Gửi danh sách đã lọc và từ khóa tìm kiếm quay lại giao diện
         res.render('admin_PopShelfList', { 
-            travels: rows, 
+            travels: rows || [], 
             search: searchQuery // Gửi lại để ô input không bị mất chữ khi load trang
         });
     });
@@ -195,13 +208,16 @@ app.get("/", (req, res) => {
 
   db.all(sql, params, (err, rows) => {
     if (err) return res.status(500).send(err.message);
-    res.render("PopShelfList", { travels: rows || [], keyword });
+    res.render("PopShelfList", { title: 'Shimane Travel', travels: rows || [], keyword });
   });
 });
 
 app.get("/all-destinations", (req, res) => {
+  console.log("\n[DEBUG] Entered /all-destinations route");
   // 1. Nhận đầy đủ tham số từ URL, bao gồm cả 'location' mới
   const { search, location, sea, rest, onsen, mountain, history } = req.query;
+  console.log("[DEBUG] Query params received:", req.query);
+
 
   let sql = "SELECT * FROM destinations WHERE 1=1";
   const params = [];
@@ -244,20 +260,36 @@ app.get("/all-destinations", (req, res) => {
 
   sql += " ORDER BY name";
 
+  console.log("[DEBUG] Executing SQL:", sql);
+  console.log("[DEBUG] With params:", params);
+
   db.all(sql, params, (err, rows) => {
-    if (err) return res.status(500).send(err.message);
+    if (err) {
+      console.error("[DEBUG] SQL Error:", err.message);
+      return res.status(500).send(err.message);
+    }
+    
+    console.log(`[DEBUG] DB query successful. Found ${rows ? rows.length : 0} rows.`);
+    console.log("[DEBUG] Preparing to render 'all-destinations.ejs'");
     
     // 5. Render lại giao diện với đầy đủ các biến để file EJS không bị lỗi "not defined"
-    res.render("all-destinations", {
-      travels: rows || [],
-      keyword: search || "",
-      location: location || "all", // Biến mới để giữ trạng thái Dropdown
-      sea,
-      rest,
-      onsen,
-      mountain,
-      history,
-    });
+    try {
+      res.render("all-destinations", {
+        title: '全ての観光地',
+        travels: rows || [],
+        keyword: search || "",
+        location: location || "all", // Biến mới để giữ trạng thái Dropdown
+        sea,
+        rest,
+        onsen,
+        mountain,
+        history,
+      });
+      console.log("[DEBUG] res.render() called successfully.");
+    } catch (renderError) {
+      console.error("[DEBUG] EJS Render Error:", renderError);
+      res.status(500).send("A server error occurred during page rendering.");
+    }
   });
 });
 
@@ -274,16 +306,26 @@ app.get("/travel/:id", (req, res) => {
   });
 });
 
-app.get("/cuisine", (req, res) => res.render("cuisine"));
-app.get("/people", (req, res) => res.render("people"));
+app.get("/cuisine", (req, res) => res.render("cuisine", { title: "グルメ" }));
+app.get("/people", (req, res) => res.render("people", { title: "匠・人物" }));
+app.get("/shimane-history", (req, res) => res.render("shimane-history", { title: "歴史" }));
 
-app.get("/shimane-history", (req, res) => res.render("shimane-history"));
-app.get("/contact", (req, res) => res.render("contact", { sent: false }));
+app.get("/gourmet-souvenirs", (req, res) => {
+  res.render("gourmet-souvenirs", { title: "グルメ・お土産" });
+});
+
+app.get("/access", (req, res) => {
+  res.render("access", { title: "アクセス" });
+});
+
+app.get('/contact', (req, res) => {
+    res.render('contact', { title: 'お問い合わせ', sent: false, error: null });
+});
 app.post("/contact", (req, res) => {
   const { name, email, subject, message } = req.body;
   
   if (!name || !email || !subject || !message) {
-    return res.render("contact", { sent: false, error: "Vui lòng điền đầy đủ thông tin" });
+    return res.render("contact", { sent: false, error: "Vui lòng điền đầy đủ thông tin." });
   }
   
   db.run(
@@ -291,9 +333,65 @@ app.post("/contact", (req, res) => {
     [name, email, subject, message],
     (err) => {
       if (err) {
-        return res.render("contact", { sent: false, error: "Lỗi khi gửi tin nhắn" });
+        console.error("Lỗi lưu tin nhắn vào DB:", err.message);
+        return res.render("contact", { sent: false, error: "Lỗi khi lưu tin nhắn, vui lòng thử lại." });
       }
-      res.render("contact", { sent: true });
+
+      // --- Gửi 2 email song song ---
+
+      // 1. Email cho quản trị viên (bạn)
+      const adminMailOptions = {
+          from: `"${name}" <${process.env.EMAIL_USER}>`,
+          to: process.env.RECIPIENT_EMAIL,
+          replyTo: email,
+          subject: `[Liên hệ] ${subject}`,
+          html: `<p>Bạn có tin nhắn mới từ trang liên hệ Shimane Travel:</p>
+                 <ul>
+                    <li><strong>Tên:</strong> ${name}</li>
+                    <li><strong>Email:</strong> ${email}</li>
+                    <li><strong>Chủ đề:</strong> ${subject}</li>
+                 </ul>
+                 <h3>Nội dung:</h3>
+                 <p>${message}</p>`
+      };
+
+      // 2. Email xác nhận cho người dùng
+      const userMailOptions = {
+          from: `"Shimane Travel" <${process.env.EMAIL_USER}>`,
+          to: email,
+          subject: 'Cảm ơn bạn đã liên hệ với Shimane Travel',
+          html: `
+            <p>Xin chào ${name},</p>
+            <p>Cảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi đã nhận được tin nhắn của bạn và sẽ phản hồi trong thời gian sớm nhất.</p>
+            <br>
+            <p><strong>Nội dung bạn đã gửi:</strong></p>
+            <p><strong>Chủ đề:</strong> ${subject}</p>
+            <p><strong>Nội dung:</strong></p>
+            <p>${message}</p>
+            <hr>
+            <p>Trân trọng,<br>Đội ngũ Shimane Travel</p>
+          `
+      };
+
+      // Gửi mail cho admin
+      transporter.sendMail(adminMailOptions, (error, info) => {
+          if (error) {
+              console.error("Lỗi gửi email cho admin:", error);
+              // Vẫn báo thành công cho người dùng nếu tin nhắn đã vào DB
+              return res.render("contact", { sent: true, emailError: "Gửi email cho quản trị viên thất bại, nhưng tin nhắn của bạn đã được lưu." });
+          }
+          console.log('Email cho admin đã gửi: ' + info.response);
+          // Gửi mail xác nhận cho người dùng (không cần đợi)
+          transporter.sendMail(userMailOptions, (userError, userInfo) => {
+              if (userError) {
+                  console.error("Lỗi gửi email xác nhận cho người dùng:", userError);
+              } else {
+                  console.log('Email xác nhận cho người dùng đã gửi: ' + userInfo.response);
+              }
+          });
+          
+          res.render("contact", { sent: true });
+      });
     }
   );
 });
@@ -336,10 +434,10 @@ app.post('/login', (req, res) => {
                 });
                 
             } else {
-                res.render('login', { error: 'Mật khẩu không chính xác!' });
+                res.render('login', { error: 'パスワードが正しくありません！' });
             }
         } else {
-            res.render('login', { error: 'Tài khoản không tồn tại!' });
+            res.render('login', { error: 'アカウントが存在しません！' });
         }
     });
 });
@@ -354,11 +452,11 @@ app.post('/register', async (req, res) => {
         
         const sql = "INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, 'user')";
         db.run(sql, [email, username, hashedPassword], (err) => {
-            if (err) return res.render('register', { error: 'Email đã tồn tại!' });
+            if (err) return res.render('register', { error: 'メールは既に存在しています！' });
             res.redirect('/login?registered=true');
         });
     } catch (err) {
-        res.render('register', { error: 'Lỗi hệ thống, vui lòng thử lại.' });
+        res.render('register', { error: 'システムエラーが発生しました。もう一度お試しください。' });
     }
 });
 
@@ -370,7 +468,7 @@ app.get('/profile', (req, res) => {
     if (!req.session.user) return res.redirect('/login');
 
     const userId = req.session.user.id;
-    // Truy vấn lấy danh sách địa điểm đã yêu thích từ database
+    // データベースからお気に入りの場所のリストを取得するクエリ
     const sql = `
         SELECT destinations.* FROM destinations 
         JOIN favorites ON destinations.id = favorites.destination_id 
@@ -436,15 +534,44 @@ app.post("/forgot-password", (req, res) => {
   const { email } = req.body;
 
   db.get("SELECT * FROM users WHERE email = ?", [email], (err, user) => {
-    if (err) return res.status(500).send(err.message);
-    if (!user) return res.render("forgot-password", { msg: "メールアドレスが存在しません。" });
+    // Để tránh dò email, luôn hiển thị thông báo thành công chung.
+    if (err || !user) {
+      console.log(`Yêu cầu reset mật khẩu cho email (có thể không tồn tại): ${email}`);
+      return res.render("forgot-password", { msg: "Nếu email của bạn có trong hệ thống, một liên kết đặt lại mật khẩu đã được gửi đến." });
+    }
 
     const token = crypto.randomBytes(20).toString("hex");
     db.run("UPDATE users SET reset_token = ? WHERE email = ?", [token, email], (err2) => {
-      if (err2) return res.status(500).send(err2.message);
+      if (err2) {
+        console.error("Lỗi cập nhật reset token:", err2.message);
+        return res.render("forgot-password", { msg: "Đã xảy ra lỗi. Vui lòng thử lại." });
+      }
 
-      console.log(`🔑 RESET LINK: http://localhost:${port}/reset/${token}`);
-      res.render("forgot-password", { msg: "リセットリンクはコンソール（ターミナル）に表示されました。" });
+      // 2. Tạo nội dung và gửi email
+      const resetLink = `http://${req.headers.host}/reset/${token}`;
+      const mailOptions = {
+          from: `"Shimane Travel" <${process.env.EMAIL_USER}>`,
+          to: email, // Gửi đến người dùng đã yêu cầu
+          subject: 'Yêu cầu đặt lại mật khẩu của bạn',
+          html: `
+            <p>Xin chào,</p>
+            <p>Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn tại Shimane Travel.</p>
+            <p>Vui lòng nhấp vào liên kết bên dưới để tạo mật khẩu mới:</p>
+            <p><a href="${resetLink}" style="padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">Đặt lại mật khẩu</a></p>
+            <p>Liên kết sẽ hết hạn sau một khoảng thời gian ngắn. Nếu bạn không yêu cầu điều này, vui lòng bỏ qua email này.</p>
+            <p>Trân trọng,<br>Đội ngũ Shimane Travel</p>
+          `
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              console.error("Lỗi gửi email reset mật khẩu:", error);
+          } else {
+              console.log('Email reset mật khẩu đã gửi: ' + info.response);
+          }
+          // Luôn hiển thị thông báo chung cho người dùng
+          res.render("forgot-password", { msg: "Nếu email của bạn có trong hệ thống, một liên kết đặt lại mật khẩu đã được gửi đến." });
+      });
     });
   });
 });
@@ -475,7 +602,7 @@ app.post('/reset/:token', async (req, res) => {
             res.redirect('/login?reset=success');
         });
     } catch (err) {
-        res.send("Có lỗi xảy ra trong quá trình mã hóa.");
+        res.send("パスワードのハッシュ化中にエラーが発生しました。");
     }
 });
 
@@ -696,4 +823,3 @@ app.use((err, req, res, next) => {
 
 app.listen(port, () => console.log(`🚀 Server running: http://localhost:${port}`));
 module.exports = app;
-

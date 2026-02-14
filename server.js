@@ -1,5 +1,4 @@
 require('dotenv').config();
-
 const path = require("path");
 const express = require("express");
 const session = require("express-session");
@@ -185,7 +184,8 @@ app.get('/admin', checkAdmin, (req, res) => {
         // 3. Gửi danh sách đã lọc và từ khóa tìm kiếm quay lại giao diện
         res.render('admin_PopShelfList', { 
             travels: rows || [], 
-            search: searchQuery // Gửi lại để ô input không bị mất chữ khi load trang
+            search: searchQuery,
+            msg: req.query.msg // Pass the message parameter
         });
     });
 });
@@ -325,7 +325,7 @@ app.post("/contact", (req, res) => {
   const { name, email, subject, message } = req.body;
   
   if (!name || !email || !subject || !message) {
-    return res.render("contact", { sent: false, error: "Vui lòng điền đầy đủ thông tin." });
+    return res.render("contact", { sent: false, error: "全ての情報を入力してください." });
   }
   
   db.run(
@@ -337,42 +337,41 @@ app.post("/contact", (req, res) => {
         return res.render("contact", { sent: false, error: "Lỗi khi lưu tin nhắn, vui lòng thử lại." });
       }
 
-      // --- Gửi 2 email song song ---
-
-      // 1. Email cho quản trị viên (bạn)
+// 1. 管理者への通知メール 
       const adminMailOptions = {
           from: `"${name}" <${process.env.EMAIL_USER}>`,
           to: process.env.RECIPIENT_EMAIL,
           replyTo: email,
-          subject: `[Liên hệ] ${subject}`,
-          html: `<p>Bạn có tin nhắn mới từ trang liên hệ Shimane Travel:</p>
+          subject: `【お問い合わせ】${subject}`,
+          html: `<p>しまねトラベルのコンタクトフォームから新しいメッセージが届きました：</p>
                  <ul>
-                    <li><strong>Tên:</strong> ${name}</li>
-                    <li><strong>Email:</strong> ${email}</li>
-                    <li><strong>Chủ đề:</strong> ${subject}</li>
+                    <li><strong>お名前:</strong> ${name}</li>
+                    <li><strong>メールアドレス:</strong> ${email}</li>
+                    <li><strong>件名:</strong> ${subject}</li>
                  </ul>
-                 <h3>Nội dung:</h3>
+                 <h3>メッセージ内容:</h3>
                  <p>${message}</p>`
       };
 
-      // 2. Email xác nhận cho người dùng
+   // 2. ユーザーへの確認メール 
       const userMailOptions = {
-          from: `"Shimane Travel" <${process.env.EMAIL_USER}>`,
+          from: `"しまねトラベル" <${process.env.EMAIL_USER}>`,
           to: email,
-          subject: 'Cảm ơn bạn đã liên hệ với Shimane Travel',
+          subject: '【しまねトラベル】お問い合わせありがとうございました',
           html: `
-            <p>Xin chào ${name},</p>
-            <p>Cảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi đã nhận được tin nhắn của bạn và sẽ phản hồi trong thời gian sớm nhất.</p>
+            <p>${name} 様</p>
+            <p>この度は、しまねトラベルへお問い合わせいただき、誠にありがとうございます。<br>
+            内容を確認の上、担当者より折り返しご連絡させていただきますので、今しばらくお待ちください。</p>
             <br>
-            <p><strong>Nội dung bạn đã gửi:</strong></p>
-            <p><strong>Chủ đề:</strong> ${subject}</p>
-            <p><strong>Nội dung:</strong></p>
+            <p><strong>■ お問い合わせ内容の確認</strong></p>
+            <p><strong>件名:</strong> ${subject}</p>
+            <p><strong>メッセージ:</strong></p>
             <p>${message}</p>
             <hr>
-            <p>Trân trọng,<br>Đội ngũ Shimane Travel</p>
+            <p>※このメールはシステムからの自動返信です。<br>
+            しまねトラベル 事務局</p>
           `
       };
-
       // Gửi mail cho admin
       transporter.sendMail(adminMailOptions, (error, info) => {
           if (error) {
@@ -536,15 +535,15 @@ app.post("/forgot-password", (req, res) => {
   db.get("SELECT * FROM users WHERE email = ?", [email], (err, user) => {
     // Để tránh dò email, luôn hiển thị thông báo thành công chung.
     if (err || !user) {
-      console.log(`Yêu cầu reset mật khẩu cho email (có thể không tồn tại): ${email}`);
-      return res.render("forgot-password", { msg: "Nếu email của bạn có trong hệ thống, một liên kết đặt lại mật khẩu đã được gửi đến." });
+      console.log(`電子メールのパスワードをリセットするリクエスト (存在しない可能性があります): ${email}`);
+      return res.render("forgot-password", { msg: "あなたの登録しているメールアドレスに, パスワードにリセットリンクを発信されます⁈.メールをご確認をお願い致します。." });
     }
 
     const token = crypto.randomBytes(20).toString("hex");
     db.run("UPDATE users SET reset_token = ? WHERE email = ?", [token, email], (err2) => {
       if (err2) {
         console.error("Lỗi cập nhật reset token:", err2.message);
-        return res.render("forgot-password", { msg: "Đã xảy ra lỗi. Vui lòng thử lại." });
+        return res.render("forgot-password", { msg: "." });
       }
 
       // 2. Tạo nội dung và gửi email
@@ -552,25 +551,25 @@ app.post("/forgot-password", (req, res) => {
       const mailOptions = {
           from: `"Shimane Travel" <${process.env.EMAIL_USER}>`,
           to: email, // Gửi đến người dùng đã yêu cầu
-          subject: 'Yêu cầu đặt lại mật khẩu của bạn',
+          subject: 'パスワードのリセットをリクエストする',
           html: `
-            <p>Xin chào,</p>
-            <p>Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn tại Shimane Travel.</p>
-            <p>Vui lòng nhấp vào liên kết bên dưới để tạo mật khẩu mới:</p>
+            <p>こんにちは。お世話になっております,</p>
+            <p>しまねトラベルのアカウントのパスワードをリセットするリクエストを受け取りました。</p>
+            <p>新しいパスワードを作成するには、以下のリンクをクリックし、パスワードを変更してください。</p>
             <p><a href="${resetLink}" style="padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">Đặt lại mật khẩu</a></p>
-            <p>Liên kết sẽ hết hạn sau một khoảng thời gian ngắn. Nếu bạn không yêu cầu điều này, vui lòng bỏ qua email này.</p>
-            <p>Trân trọng,<br>Đội ngũ Shimane Travel</p>
+            <p>リンクは短期間で期限切れになります。リクエストしていない場合は、このメールを無視してください。敬具、島根旅行チーム</p>
+            <p>大切に,<br>Travel Shimane 島根旅行チーム</p>
           `
       };
 
       transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
-              console.error("Lỗi gửi email reset mật khẩu:", error);
+              console.error("エラーを発生しました:", error);
           } else {
-              console.log('Email reset mật khẩu đã gửi: ' + info.response);
+              console.log('パスワードリセットメールを送信しました、メールを確認ください。: ' + info.response);
           }
           // Luôn hiển thị thông báo chung cho người dùng
-          res.render("forgot-password", { msg: "Nếu email của bạn có trong hệ thống, một liên kết đặt lại mật khẩu đã được gửi đến." });
+          res.render("forgot-password", { msg: "あなたの登録しているメールアドレスに, パスワードにリセットリンクを発信されます⁈.メールをご確認ください。" });
       });
     });
   });
@@ -617,8 +616,6 @@ app.post('/toggle-favorite', (req, res) => {
 
     const { destinationId } = req.body;
     const userId = req.session.user.id;
-
-    // Kiểm tra xem đã có trong danh sách chưa
     db.get("SELECT * FROM favorites WHERE user_id = ? AND destination_id = ?", [userId, destinationId], (err, row) => {
         if (row) {
             // Đã có -> Xóa (Unlike)
@@ -716,7 +713,7 @@ app.post("/admin/add", checkAuth, checkAdmin, (req, res) => {
         });
       }
       
-      res.redirect("/admin");
+      res.redirect("/admin?msg=addSuccess");
     }
   );
 });
@@ -751,7 +748,6 @@ app.post("/admin/edit/:id", checkAuth, checkAdmin, (req, res) => {
         notice_text, best_season, news_update 
     } = req.body;
     
-    // XỬ LÝ: Nếu map_iframe là iframe tag HTML, extract URL từ src
     if (map_iframe && map_iframe.includes('<iframe')) {
         const srcMatch = map_iframe.match(/src="([^"]+)"/);
         if (srcMatch) {
@@ -801,21 +797,18 @@ app.post("/admin/edit/:id", checkAuth, checkAdmin, (req, res) => {
             });
         }
 
-        console.log(`✅ Đã cập nhật thành công địa điểm ID: ${id}`);
-        res.redirect("/admin");
+        console.log(`✅ ロケーションIDが正常に更新されました: ${id}`);
+        res.redirect("/admin?msg=editSuccess");
     });
 });
 
 app.post("/admin/delete/:id", checkAuth, checkAdmin, (req, res) => {
   db.run("DELETE FROM destinations WHERE id = ?", [req.params.id], (err) => {
     if (err) return res.status(500).send(err.message);
-    res.redirect("/admin");
+    res.redirect("/admin?msg=deleteSuccess");
   });
 });
 
-// ===============================================================
-// 9) ERROR HANDLER
-// ===============================================================
 app.use((err, req, res, next) => {
   console.error("SERVER ERROR:", err);
   res.status(500).send("Internal Server Error");

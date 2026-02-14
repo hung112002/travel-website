@@ -23,6 +23,17 @@
 
     <main class="admin-container">
         <h2>場所のリスト</h2>
+        <% if (typeof msg !== 'undefined' && msg) { %>
+            <div class="admin-success-message">
+                <% if (msg === 'addSuccess') { %>
+                    新しい場所が追加されました！
+                <% } else if (msg === 'editSuccess') { %>
+                    場所が更新されました！
+                <% } else if (msg === 'deleteSuccess') { %>
+                    場所が削除されました！
+                <% } %>
+            </div>
+        <% } %>
          
         <div class="admin-toolbar">
             <form action="/admin" method="GET" class="search-form">

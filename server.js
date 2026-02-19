@@ -91,12 +91,26 @@ const db = new sqlite3.Database("./travel.db", (err) => {
 
 // Configure Nodemailer transporter
 const transporter = nodemailer.createTransport({
-    service: 'gmail', // You can use other services like 'Outlook365', 'SendGrid', etc.
-                     // Or direct SMTP configuration: { host: 'smtp.example.com', port: 587, secure: false, auth: { user, pass } }
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, // Port 587 requires secure: false
     auth: {
-        user: process.env.EMAIL_USER || 'your_email@gmail.com', // ⚠️ REPLACE with your actual email address
-        pass: process.env.EMAIL_PASS || 'your_email_password'  // ⚠️ REPLACE with your actual email password or app-specific password
-                                                            // For Gmail, you might need an App Password: https://support.google.com/accounts/answer/185833
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    },
+    tls: {
+        // Tránh lỗi liên quan đến IPv6 và chứng chỉ tự ký trên một số môi trường cloud
+        rejectUnauthorized: false,
+        minVersion: 'TLSv1.2'
+    }
+});
+
+// Kiểm tra kết nối Email khi server khởi động
+transporter.verify((error, success) => {
+    if (error) {
+        console.error("❌ Lỗi cấu hình Email:", error.message);
+    } else {
+        console.log("✅ Server đã sẵn sàng gửi email qua port 587");
     }
 });
 
@@ -328,72 +342,43 @@ app.post("/contact", (req, res) => {
     return res.render("contact", { sent: false, error: "全ての情報を入力してください." });
   }
   
-  db.run(
-    "INSERT INTO contacts (name, email, subject, message) VALUES (?, ?, ?, ?)",
-    [name, email, subject, message],
-    (err) => {
-      if (err) {
-        console.error("Lỗi lưu tin nhắn vào DB:", err.message);
-        return res.render("contact", { sent: false, error: "Lỗi khi lưu tin nhắn, vui lòng thử lại." });
+      db.run(
+      "INSERT INTO contacts (name, email, subject, message) VALUES (?, ?, ?, ?)",
+      [name, email, subject, message],
+      (err) => {
+        if (err) {
+          console.error("Lỗi lưu tin nhắn vào DB:", err.message);
+          return res.render("contact", { sent: false, error: "Lỗi khi lưu tin nhắn, vui lòng thử lại." });
+        }
+  
+        // TRẢ VỀ GIAO DIỆN NGAY LẬP TỨC để hết loading
+        res.render("contact", { sent: true });
+  
+        // GỬI EMAIL CHẠY NGẦM (BACKGROUND)
+        const adminMailOptions = {
+            from: `"Hệ thống" <${process.env.EMAIL_USER}>`,
+            to: process.env.RECIPIENT_EMAIL,
+            replyTo: email,
+            subject: `【お問い合わせ】${subject}`,
+            html: `<p>新しいメッセージが届きました：</p>
+                   <ul>
+                      <li><strong>お名前:</strong> ${name}</li>
+                      <li><strong>メールアドレス:</strong> ${email}</li>
+                   </ul>
+                   <p>内容: ${message}</p>`
+        };
+  
+        const userMailOptions = {
+            from: `"Shimane Travel" <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject: 'お問い合わせありがとうございました',
+            html: `<p>${name} 様, お問い合わせありがとうございました。</p>`
+        };
+  
+        transporter.sendMail(adminMailOptions).catch(e => console.error("Lỗi gửi mail admin:", e));
+        transporter.sendMail(userMailOptions).catch(e => console.error("Lỗi gửi mail xác nhận:", e));
       }
-
-// 1. 管理者への通知メール 
-      const adminMailOptions = {
-          from: `"${name}" <${process.env.EMAIL_USER}>`,
-          to: process.env.RECIPIENT_EMAIL,
-          replyTo: email,
-          subject: `【お問い合わせ】${subject}`,
-          html: `<p>しまねトラベルのコンタクトフォームから新しいメッセージが届きました：</p>
-                 <ul>
-                    <li><strong>お名前:</strong> ${name}</li>
-                    <li><strong>メールアドレス:</strong> ${email}</li>
-                    <li><strong>件名:</strong> ${subject}</li>
-                 </ul>
-                 <h3>メッセージ内容:</h3>
-                 <p>${message}</p>`
-      };
-
-   // 2. ユーザーへの確認メール 
-      const userMailOptions = {
-          from: `"しまねトラベル" <${process.env.EMAIL_USER}>`,
-          to: email,
-          subject: '【しまねトラベル】お問い合わせありがとうございました',
-          html: `
-            <p>${name} 様</p>
-            <p>この度は、しまねトラベルへお問い合わせいただき、誠にありがとうございます。<br>
-            内容を確認の上、担当者より折り返しご連絡させていただきますので、今しばらくお待ちください。</p>
-            <br>
-            <p><strong>■ お問い合わせ内容の確認</strong></p>
-            <p><strong>件名:</strong> ${subject}</p>
-            <p><strong>メッセージ:</strong></p>
-            <p>${message}</p>
-            <hr>
-            <p>※このメールはシステムからの自動返信です。<br>
-            しまねトラベル 事務局</p>
-          `
-      };
-      // Gửi mail cho admin
-      transporter.sendMail(adminMailOptions, (error, info) => {
-          if (error) {
-              console.error("Lỗi gửi email cho admin:", error);
-              // Vẫn báo thành công cho người dùng nếu tin nhắn đã vào DB
-              return res.render("contact", { sent: true, emailError: "Gửi email cho quản trị viên thất bại, nhưng tin nhắn của bạn đã được lưu." });
-          }
-          console.log('Email cho admin đã gửi: ' + info.response);
-          // Gửi mail xác nhận cho người dùng (không cần đợi)
-          transporter.sendMail(userMailOptions, (userError, userInfo) => {
-              if (userError) {
-                  console.error("Lỗi gửi email xác nhận cho người dùng:", userError);
-              } else {
-                  console.log('Email xác nhận cho người dùng đã gửi: ' + userInfo.response);
-              }
-          });
-          
-          res.render("contact", { sent: true });
-      });
-    }
-  );
-});
+    );});
 
 // ===============================================================
 // 5) AUTH ROUTES

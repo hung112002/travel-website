@@ -28,23 +28,23 @@
         <form class="admin-form" action="<%= travel ? '/admin/edit/' + travel.id : '/admin/add' %>" method="POST">
             
             <fieldset class="form-section">
-                <legend>基本情報 (Thông tin cơ bản)</legend>
+                <legend>基本情報</legend>
                 <div class="form-group">
-                    <label for="name">名前 (Tên địa danh):</label>
+                    <label for="name">名前:</label>
                     <input type="text" id="name" name="name" value="<%= travel ? travel.name : '' %>" required>
                 </div>
                 <div class="form-group">
-                    <label for="location">場所 (Địa chỉ):</label>
+                    <label for="location">場所:</label>
                     <input type="text" id="location" name="location" value="<%= travel ? travel.location : '' %>" placeholder="例: 島根県松江市...">
                 </div>
                 <div class="form-group">
-                    <label for="imageUrl">代表画像URL (URL ảnh chính):</label>
+                    <label for="imageUrl">代表画像URL:</label>
                     <input type="text" id="imageUrl" name="imageUrl" value="<%= travel ? travel.imageUrl : '' %>">
                 </div>
             </fieldset>
 
             <fieldset class="form-section checkbox-grid">
-                <legend>カテゴリー (Phân loại)</legend>
+                <legend>カテゴリー</legend>
                 <label><input type="checkbox" name="is_featured" value="1" <%= (travel && travel.is_featured) ? 'checked' : '' %>> おすすめ表示</label>
                 <label><input type="checkbox" name="has_beach" value="1" <%= (travel && travel.has_beach) ? 'checked' : '' %>> 🌊 海沿い</label>
                 <label><input type="checkbox" name="has_rest_stop" value="1" <%= (travel && travel.has_rest_stop) ? 'checked' : '' %>> ☕ 休憩所</label>
@@ -54,14 +54,14 @@
             </fieldset>
 
             <fieldset class="form-section">
-                <legend>詳細情報 (Thông tin chi tiết)</legend>
+                <legend>詳細情報</legend>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>営業時間 (Giờ mở cửa):</label>
+                        <label>営業時間:</label>
                         <input type="text" name="opening_hours" value="<%= travel ? travel.opening_hours : '' %>" placeholder="09:00 - 17:00">
                     </div>
                     <div class="form-group">
-                        <label>定休日 (Ngày nghỉ):</label>
+                        <label>定休日:</label>
                         <input type="text" name="closed_days" value="<%= travel ? travel.closed_days : '' %>" placeholder="月曜日、年末年始">
                     </div>
                 </div>
@@ -76,48 +76,48 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>アクセス (Cách đi lại):</label>
+                    <label>アクセス:</label>
                     <input type="text" name="access" value="<%= travel ? travel.access : '' %>">
                 </div>
                 <div class="form-group">
                     <label>Google Maps Embed URL (Google Maps Embed Link):</label>
                     <textarea name="map_iframe" rows="2" placeholder="Ví dụ: https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!..."><%= travel ? travel.map_iframe : '' %></textarea>
-                    <small style="color: #666; display: block; margin-top: 5px;">💡 Hướng dẫn: Trên Google Maps, bấm "Chia sẻ" → "Nhúng bản đồ" → Copy phần link từ src="..." (không cần copy cả thẻ iframe)</small>
+                    <small style="color: #666; display: block; margin-top: 5px;">💡 </small>
                 </div>
             </fieldset>
 
             <fieldset class="form-section alert-fields">
-                <legend>お知らせ & ニュース (Thông báo & Tin tức)</legend>
+                <legend>お知らせ & ニュース</legend>
                 <div class="form-group">
-                    <label style="color: #d32f2f;">⚠️ 重要なお知らせ (Thông báo khẩn):</label>
-                    <textarea name="notice_text" rows="2" placeholder="Ví dụ: Đóng cửa bảo trì ngày 25/1..."><%= travel ? travel.notice_text : '' %></textarea>
+                    <label style="color: #d32f2f;">⚠️ 重要なお知らせ:</label>
+                    <textarea name="notice_text" rows="2" placeholder="例: 25日は休業日です。"><%= travel ? travel.notice_text : '' %></textarea>
                 </div>
                 <div class="form-group">
-                    <label>最新ニュース (Tin tức mới):</label>
+                    <label>最新ニュース:</label>
                     <textarea name="news_update" rows="2"><%= travel ? travel.news_update : '' %></textarea>
                 </div>
                 <div class="form-group">
-                    <label>ベストシーズン (Mùa đẹp nhất):</label>
+                    <label>ベストシーズン:</label>
                     <input type="text" name="best_season" value="<%= travel ? travel.best_season : '' %>" placeholder="例: 春 (4月上旬)">
                 </div>
             </fieldset>
 
             <fieldset class="form-section">
-                <legend>フォトギャラリー (Thư viện ảnh - Dán URL)</legend>
+                <legend>フォトギャラリー</legend>
                 <div class="form-group">
-                    <label>画像URLリスト (Mỗi URL một dòng):</label>
+                    <label>画像URLリスト:</label>
                     <textarea name="gallery_urls" rows="5" placeholder="https://example.com/photo1.jpg&#10;https://example.com/photo2.jpg"><%= typeof current_gallery !== 'undefined' ? current_gallery : '' %></textarea>
                 </div>
             </fieldset>
 
             <div class="form-group">
-                <label for="description">紹介文 (Mô tả chi tiết):</label>
+                <label for="description">紹介文:</label>
                 <textarea id="description" name="description" rows="8"><%= travel ? travel.description : '' %></textarea>
             </div>
 
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">
-                    <%= travel ? '更新 (Cập nhật)' : '追加 (Thêm mới)' %>
+                    <%= travel ? '更新' : '追加' %>
                 </button>
             </div>
         </form>
